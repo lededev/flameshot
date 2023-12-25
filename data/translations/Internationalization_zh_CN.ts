@@ -1235,6 +1235,16 @@ Please solve them manually in the configuration file.</source>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="446"/>
+        <source>Use Enter key Pin</source>
+        <translation>使用回车键置顶贴图</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="448"/>
+        <source>Enable Press Enter key Pin screenshot</source>
+        <translation>使用回车键将选定区域置顶贴图</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="460"/>
         <source>Copy URL after uploading was successful</source>
         <translation>上传成功后复制URL</translation>
     </message>
@@ -2220,6 +2230,16 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>参数</translation>
     </message>
     <message>
+        <location filename="../../src/cli/commandlineparser.cpp" line="68"/>
+        <source>Subcommands</source>
+        <translation>子命令</translation>
+    </message>
+    <message>
+        <location filename="../../src/cli/commandlineparser.cpp" line="329"/>
+        <source>subcommands</source>
+        <translation>子命令</translation>
+    </message>
+    <message>
         <location filename="../../src/cli/commandlineparser.cpp" line="330"/>
         <source>Usage</source>
         <translation>用法</translation>
@@ -2476,7 +2496,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>左键双击</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="174"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="171"/>
+        <source>Enter</source>
+        <translation>回车键</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="178"/>
         <source>Toggle side panel</source>
         <translation>切换侧面板</translation>
     </message>
@@ -2572,6 +2597,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     </message>
     <message>
         <location filename="../../src/config/shortcutswidget.cpp" line="217"/>
+        <source>Middle Click</source>
+        <translation>鼠标中键</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="219"/>
         <source>Ctrl+Right Click</source>
         <translation>Ctrl+鼠标右键</translation>
     </message>
@@ -2870,8 +2900,8 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     </message>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="159"/>
-        <source>&amp;Open Save Path</source>
-        <translation type="unfinished"></translation>
+        <source>Open &amp;Save Path</source>
+        <translation>打开截图目录(&amp;S)</translation>
     </message>
 </context>
 <context>

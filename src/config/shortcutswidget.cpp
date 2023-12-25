@@ -167,6 +167,12 @@ void ShortcutsWidget::loadShortcuts()
                                               << tr("Left Double-click"));
             }
         }
+        if (shortcutName == "TYPE_PIN") {
+            if (m_config.enterKeyPin()) {
+                m_shortcuts << (QStringList() << "" << tool->description()
+                    << tr("Enter"));
+            }
+        }
         delete tool;
     }
 
@@ -213,6 +219,8 @@ void ShortcutsWidget::loadShortcuts()
     // possibly it will be solved in the QHotKey library later. So it is
     // disabled for now.
 #endif
+    m_shortcuts << (QStringList()
+                    << "" << QObject::tr("Show color picker") << tr("Middle Click"));
     m_shortcuts << (QStringList()
                     << "" << QObject::tr("Show color picker") << tr("Ctrl+Right Click"));
     m_shortcuts << (QStringList() << "" << QObject::tr("Change the tool's size")

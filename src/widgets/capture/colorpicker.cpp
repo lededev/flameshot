@@ -36,6 +36,15 @@ void ColorPicker::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
+void ColorPicker::mousePressEvent(QMouseEvent* e)
+{
+    if (e->button() == Qt::LeftButton)
+        return;
+    // Right or Middle click as ESC
+    hide();
+    return;
+}
+
 void ColorPicker::showEvent(QShowEvent* event)
 {
     grabMouse();

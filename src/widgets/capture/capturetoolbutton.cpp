@@ -69,6 +69,11 @@ void CaptureToolButton::initButton()
     } else if (!shortcut.isEmpty()) {
         tooltip += QStringLiteral(" (%1)").arg(shortcut);
     }
+    if (m_buttonType == CaptureTool::TYPE_PIN &&
+        ConfigHandler().enterKeyPin()) {
+        tooltip += QStringLiteral(" (%1Enter)")
+                     .arg(shortcut.isEmpty() ? QString() : shortcut + " or ");
+    }
     tooltip.replace("Return", "Enter");
     setToolTip(tooltip);
 

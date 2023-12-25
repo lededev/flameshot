@@ -48,6 +48,7 @@ GeneralConf::GeneralConf(QWidget* parent)
     initShowSidePanelButton();
     initUseJpgForClipboard();
     initCopyOnDoubleClick();
+    initEnterPin();
     initSaveAfterCopy();
     initCopyPathAfterSave();
     initCopyAndCloseAfterUpload();
@@ -83,6 +84,7 @@ void GeneralConf::_updateComponents(bool allowEmptySavePath)
     m_antialiasingPinZoom->setChecked(config.antialiasingPinZoom());
     m_useJpgForClipboard->setChecked(config.useJpgForClipboard());
     m_copyOnDoubleClick->setChecked(config.copyOnDoubleClick());
+    m_enterKeyPin->setChecked(config.enterKeyPin());
     m_uploadWithoutConfirmation->setChecked(config.uploadWithoutConfirmation());
     m_historyConfirmationToDelete->setChecked(
       config.historyConfirmationToDelete());
@@ -436,6 +438,18 @@ void GeneralConf::initCopyOnDoubleClick()
 
     connect(m_copyOnDoubleClick, &QCheckBox::clicked, [](bool checked) {
         ConfigHandler().setCopyOnDoubleClick(checked);
+    });
+}
+
+void GeneralConf::initEnterPin()
+{
+    m_enterKeyPin = new QCheckBox(tr("Use Enter key Pin"), this);
+    m_enterKeyPin->setToolTip(
+      tr("Enable Press Enter key Pin screenshot"));
+    m_scrollAreaLayout->addWidget(m_enterKeyPin);
+
+    connect(m_enterKeyPin, &QCheckBox::clicked, [](bool checked) {
+        ConfigHandler().setEnterKeyPin(checked);
     });
 }
 

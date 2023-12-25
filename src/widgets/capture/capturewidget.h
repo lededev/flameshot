@@ -115,6 +115,7 @@ protected:
     void resizeEvent(QResizeEvent* resizeEvent) override;
     void moveEvent(QMoveEvent* moveEvent) override;
     void changeEvent(QEvent* changeEvent) override;
+    void showEvent(QShowEvent* showEvent) override;
 
 private:
     void pushObjectsStateToUndoStack();

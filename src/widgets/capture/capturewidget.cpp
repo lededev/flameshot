@@ -12,6 +12,7 @@
 #include "capturewidget.h"
 #include "abstractlogger.h"
 #include "copytool.h"
+#include "pintool.h"
 #include "src/config/cacheutils.h"
 #include "src/config/generalconf.h"
 #include "src/core/flameshot.h"
@@ -761,10 +762,7 @@ void CaptureWidget::mousePressEvent(QMouseEvent* e)
     }
 
     if (e->button() == Qt::RightButton) {
-        if (m_activeTool && m_activeTool->editMode()) {
-            return;
-        }
-        if (e->modifiers() & Qt::ControlModifier) {
+        if ( m_adjustmentButtonPressed || e->modifiers().testFlag(Qt::ControlModifier)) {
             showColorPicker(m_mousePressedPos);
             return;
         }
@@ -779,6 +777,12 @@ void CaptureWidget::mousePressEvent(QMouseEvent* e)
             // return if success
             return;
         }
+    } else if (e->button() == Qt::MiddleButton) {
+        if (m_activeTool && m_activeTool->editMode()) {
+            return;
+        }
+        showColorPicker(m_mousePressedPos);
+        return;
     }
 
     // Commit current tool if it has edit widget and mouse click is outside
@@ -982,7 +986,17 @@ void CaptureWidget::keyPressEvent(QKeyEvent* e)
     } else if (e->key() == Qt::Key_Control) {
         m_adjustmentButtonPressed = true;
         updateCursor();
-    } else if (e->key() == Qt::Key_Enter) {
+    } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) {
+        if (m_config.enterKeyPin()) {
+            PinTool pinTool;
+            connect(&pinTool,
+                    &PinTool::requestAction,
+                    this,
+                    &CaptureWidget::handleToolSignal);
+            pinTool.pressed(m_context);
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            return;
+        }
         // Make no difference for Return and Enter keys
         QCoreApplication::postEvent(
           this,
@@ -1060,6 +1074,11 @@ void CaptureWidget::changeEvent(QEvent* e)
         // used for the update rect
         update(QRect(bottomRight - QPoint(1000, 200), bottomRight));
     }
+}
+
+void CaptureWidget::showEvent(QShowEvent* showEvent)
+{
+    QTimer::singleShot(500, this, [=]() { setFocus(); });
 }
 
 void CaptureWidget::initContext(bool fullscreen, const CaptureRequest& req)

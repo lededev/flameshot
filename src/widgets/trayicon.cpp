@@ -156,7 +156,7 @@ void TrayIcon::initMenu()
             Flameshot::instance(),
             &Flameshot::history);
 
-    auto* openSavePathAction = new QAction(tr("&Open Save Path"), this);
+    auto* openSavePathAction = new QAction(tr("Open &Save Path"), this);
     connect(openSavePathAction,
             &QAction::triggered,
             Flameshot::instance(),
