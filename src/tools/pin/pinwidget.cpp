@@ -137,12 +137,12 @@ bool PinWidget::scrollEvent(QWheelEvent* event)
 
 void PinWidget::enterEvent(QEvent*)
 {
-    m_shadowEffect->setColor(m_hoverColor);
+    if(m_shadowEffect) m_shadowEffect->setColor(m_hoverColor);
 }
 
 void PinWidget::leaveEvent(QEvent*)
 {
-    m_shadowEffect->setColor(m_baseColor);
+    if(m_shadowEffect) m_shadowEffect->setColor(m_baseColor);
 }
 
 void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
@@ -327,6 +327,19 @@ void PinWidget::showContextMenu(const QPoint& pos)
             this,
             &PinWidget::decreaseOpacity);
     contextMenu.addAction(&decreaseOpacityAction);
+
+    QAction hideShadowAction(tr("Hide Shadow"), this);
+    if (m_shadowEffect && m_shadowEffect->isEnabled()) {
+        connect(&hideShadowAction,
+            &QAction::triggered,
+            this,
+            [=]() {
+                m_shadowEffect->setEnabled(false);
+                setGraphicsEffect(nullptr);
+                m_shadowEffect = nullptr;
+            });
+        contextMenu.addAction(&hideShadowAction);
+    }
 
     QAction closePinAction(tr("Close"), this);
     connect(&closePinAction, &QAction::triggered, this, &PinWidget::closePin);

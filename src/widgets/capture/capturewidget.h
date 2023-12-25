@@ -25,6 +25,15 @@
 #include <QUndoStack>
 #include <QWidget>
 
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#include <set>
+typedef struct _BRECT {
+    bool mainwnd;
+    RECT rect;
+} BRECT;
+#endif
+
 class QLabel;
 class QPaintEvent;
 class QResizeEvent;
@@ -135,6 +144,7 @@ private:
                                   const char* slot);
 
     void setToolSize(int size);
+    void changeCaptureRectSize(bool down);
 
     QRect extendedSelection() const;
     QRect extendedRect(const QRect& r) const;
@@ -222,4 +232,14 @@ private:
     // Grid
     bool m_displayGrid{ false };
     int m_gridSize{ 10 };
+#ifdef Q_OS_WIN
+    struct lpData_t {
+        POINT curPos;
+        std::set<BRECT> rects;
+    } m_allWinData;
+    std::vector<BRECT> m_ansRects;
+    uint32_t m_rectSelectLevel = 0;
+    void saveCurrentAllWnd();
+    void saveCurrentAllChildWnd(HWND hwnd);
+#endif
 };

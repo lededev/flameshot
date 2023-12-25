@@ -3,17 +3,19 @@
 
 #include "globalshortcutfilter.h"
 #include "src/core/flameshot.h"
+#include <qdebug.h>
 #include <qt_windows.h>
 
 GlobalShortcutFilter::GlobalShortcutFilter(QObject* parent)
   : QObject(parent)
 {
     // Forced Print Screen
-    if (RegisterHotKey(NULL, 1, 0, VK_SNAPSHOT)) {
+    if (RegisterHotKey(NULL, 1, MOD_SHIFT, VK_SNAPSHOT)) {
         // ok - capture screen
+        qDebug() << "Reg ctrl+alt+shift+win+S OK";
     }
 
-    if (RegisterHotKey(NULL, 2, MOD_SHIFT, VK_SNAPSHOT)) {
+    if (RegisterHotKey(NULL, 2, MOD_ALT|MOD_SHIFT|MOD_CONTROL|MOD_WIN, 'S')) {
         // ok - show screenshots history
     }
 }
@@ -33,12 +35,12 @@ bool GlobalShortcutFilter::nativeEventFilter(const QByteArray& eventType,
         const quint32 modifiers = LOWORD(msg->lParam);
 
         // Show screenshots history
-        if (VK_SNAPSHOT == keycode && MOD_SHIFT == modifiers) {
+        if ('S' == keycode && MOD_ALT|MOD_SHIFT|MOD_CONTROL|MOD_WIN == modifiers) {
             Flameshot::instance()->history();
         }
 
         // Capture screen
-        if (VK_SNAPSHOT == keycode && 0 == modifiers) {
+        if (VK_SNAPSHOT == keycode && MOD_SHIFT == modifiers) {
             Flameshot::instance()->requestCapture(
               CaptureRequest(CaptureRequest::GRAPHICAL_MODE));
         }

@@ -126,6 +126,8 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
         );
 #endif
 
+        saveCurrentAllWnd();
+
         for (QScreen* const screen : QGuiApplication::screens()) {
             QPoint topLeftScreen = screen->geometry().topLeft();
 
@@ -275,10 +277,10 @@ CaptureWidget::~CaptureWidget()
     if (m_captureDone) {
         auto lastRegion = m_selection->geometry();
         setLastRegion(lastRegion);
-        QRect geometry(m_context.selection);
-        geometry.setTopLeft(geometry.topLeft() + m_context.widgetOffset);
+        QRect selGeometry(m_context.selection);
+        selGeometry.moveTo(selGeometry.topLeft() + m_context.widgetOffset);
         Flameshot::instance()->exportCapture(
-          pixmap(), geometry, m_context.request);
+          pixmap(), selGeometry, m_context.request);
     } else {
         emit Flameshot::instance()->captureFailed();
     }
@@ -432,10 +434,14 @@ void CaptureWidget::initHelpMessage()
             keyMap << QPair(shortcut, tool->description());
         }
     }
-    keyMap << QPair(tr("Mouse Wheel"), tr("Change tool size"));
-    keyMap << QPair(tr("Right Click"), tr("Show color picker"));
+#ifdef Q_OS_WIN
+    keyMap << QPair(tr("Mouse Wheel"), tr("Change select area by window"));
+#endif
+    keyMap << QPair(tr("Ctrl+Mouse Wheel"), tr("Change tool size"));
+    keyMap << QPair(tr("Ctrl+Right Click"), tr("Show color picker"));
     keyMap << QPair(ConfigHandler().shortcut("TYPE_TOGGLE_PANEL"),
                     tr("Open side panel"));
+    keyMap << QPair(tr("Right Click"), tr("Exit"));
     keyMap << QPair(tr("Esc"), tr("Exit"));
 
     m_helpMessage = OverlayMessage::compileFromKeyMap(keyMap);
@@ -758,7 +764,12 @@ void CaptureWidget::mousePressEvent(QMouseEvent* e)
         if (m_activeTool && m_activeTool->editMode()) {
             return;
         }
-        showColorPicker(m_mousePressedPos);
+        if (e->modifiers() & Qt::ControlModifier) {
+            showColorPicker(m_mousePressedPos);
+            return;
+        }
+        // Right click as ESC
+        deleteToolWidgetOrClose();
         return;
     } else if (e->button() == Qt::LeftButton) {
         m_mouseIsClicked = true;
@@ -1017,8 +1028,12 @@ void CaptureWidget::wheelEvent(QWheelEvent* e)
             return;
         }
     }
-
-    setToolSize(m_context.toolSize + toolSizeOffset);
+    if (e->modifiers() & Qt::ControlModifier) {
+        setToolSize(m_context.toolSize + toolSizeOffset);
+    }
+    else if (toolSizeOffset != 0 && e->buttons() == Qt::NoButton) {
+        changeCaptureRectSize(toolSizeOffset > 0);
+    }
 }
 
 void CaptureWidget::resizeEvent(QResizeEvent* e)
@@ -1928,3 +1943,136 @@ void CaptureWidget::drawInactiveRegion(QPainter* painter)
     painter->setClipRegion(grey);
     painter->drawRect(-1, -1, rect().width() + 1, rect().height() + 1);
 }
+
+void CaptureWidget::changeCaptureRectSize(bool down)
+{
+#ifdef Q_OS_WIN
+    auto pos = QCursor::pos();
+    std::vector<BRECT> ansRects;
+    for (auto& r : m_allWinData.rects)
+    {
+        if ((r.rect.left <= pos.x()) &&
+            (r.rect.right >= pos.x()) &&
+            (r.rect.top <= pos.y()) &&
+            (r.rect.bottom >= pos.y())) {
+            ansRects.push_back(r);
+        }
+    }
+    if (!ansRects.size()) {
+        m_ansRects.clear();
+        return;
+    }
+    if (ansRects == m_ansRects) {
+        if (down) {
+            m_rectSelectLevel = (m_rectSelectLevel + 1) % ansRects.size();
+        }
+        else {
+            m_rectSelectLevel = (m_rectSelectLevel > 0) ?
+                m_rectSelectLevel - 1:
+                m_rectSelectLevel = ansRects.size() - 1;
+        }
+    }
+    else {
+        m_ansRects = ansRects;
+        m_rectSelectLevel = 0;
+        if (!down) {
+            for (auto i = 0; i < ansRects.size(); ++i) {
+                m_rectSelectLevel = i;
+                if (ansRects[i].mainwnd)
+                    break;
+            }
+        }
+    }
+    if (m_rectSelectLevel >= ansRects.size())
+        return;
+    auto r = ansRects.at(m_rectSelectLevel).rect;
+    QPoint s(r.left, r.top);
+    QPoint e(r.right, r.bottom);
+    QRect rect(s, e);
+    rect.moveTo(rect.topLeft() - mapToGlobal(QPoint(0, 0)));
+    qDebug() << "At Pos: " << pos.x() << "," << pos.y() <<
+        " Find Rect: " << r.left << "," << r.top << "," << r.right << "," << r.bottom <<
+        " dist Rect: " << rect.left() << "," << rect.top() << "," << rect.top() << "," << rect.bottom() <<
+        " All: " << m_allWinData.rects.size() <<
+        " Ans: " << ansRects.size() << " lv: " << m_rectSelectLevel;
+    m_selection->show();
+    m_selection->setGeometry(rect);
+    emit m_selection->geometrySettled();
+    m_buttonHandler->show();
+    updateSelectionState();
+#endif
+}
+
+#ifdef Q_OS_WIN
+bool operator<(const BRECT& one, const BRECT& other) {
+    const int64_t area1 = abs(one.rect.right - one.rect.left) * abs(one.rect.bottom - one.rect.top);
+    const int64_t area2 = abs(other.rect.right - other.rect.left) * abs(other.rect.bottom - other.rect.top);
+    if (area1 != area2) return area1 < area2;
+    if (one.rect.left != other.rect.left) return one.rect.left < other.rect.left;
+    if (one.rect.top != other.rect.top) return one.rect.top < other.rect.top;
+    if (one.rect.right != other.rect.right) return one.rect.right < other.rect.right;
+    return one.rect.bottom < other.rect.bottom;
+}
+
+bool operator==(const BRECT& one, const BRECT& other) {
+    return (one.rect.left == other.rect.left) &&
+        (one.rect.top == other.rect.top) &&
+        (one.rect.right == other.rect.right) &&
+        (one.rect.bottom == other.rect.bottom);
+}
+
+void CaptureWidget::saveCurrentAllChildWnd(HWND hwnd)
+{
+    EnumChildWindows(hwnd, [](HWND hwnd, LPARAM lParam) -> BOOL {
+            if (NULL == lParam)
+                return TRUE;
+            BRECT br{ false };
+            GetWindowRect(hwnd, &(br.rect));
+            lpData_t * pData = reinterpret_cast<lpData_t*>(lParam);
+            if (pData)
+                pData->rects.insert(br);
+            return TRUE;
+        }, reinterpret_cast<LPARAM>(&m_allWinData)
+    );
+}
+
+void CaptureWidget::saveCurrentAllWnd()
+{
+    std::vector<HWND> win;
+    EnumWindows([](HWND hwnd, LPARAM lparam) -> BOOL {
+            if (NULL == lparam)
+                return TRUE;
+            auto pdata = reinterpret_cast<std::vector<HWND> *>(lparam);
+            pdata->push_back(hwnd);
+            return TRUE;
+        }, reinterpret_cast<LPARAM>(&win)
+    );
+    const auto cyEdge = GetSystemMetrics(SM_CYEDGE);
+    const auto cxEdge = GetSystemMetrics(SM_CXEDGE);
+    for (auto h : win) {
+        BRECT br{ true };
+        GetWindowRect(h, &(br.rect));
+        LONG classStyle = GetClassLong(h, GCL_STYLE);
+        if (classStyle & (CS_DROPSHADOW | CS_BYTEALIGNWINDOW)) {
+            br.rect.left += cxEdge;
+            br.rect.right -= cxEdge;
+            br.rect.bottom -= cyEdge;
+        }
+        m_allWinData.rects.insert(br);
+        saveCurrentAllChildWnd(h);
+    }
+#ifdef QT_DEBUG0
+    if (!m_lpAllWinData.rects.size())
+        return;
+    QFile qf("z:\\win_all.txt");
+    if (qf.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream out(&qf);
+        for (auto r : m_lpAllWinData.rects)
+        {
+            out << "Rect: " << r.left << "," << r.top << "," << r.right << "," << r.bottom << "\n";
+        }
+    }
+#endif
+}
+#endif

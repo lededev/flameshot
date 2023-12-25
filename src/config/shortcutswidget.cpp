@@ -195,7 +195,7 @@ void ShortcutsWidget::loadShortcuts()
     // non-editable shortcuts have an empty shortcut name
 
     m_shortcuts << (QStringList() << "" << QObject::tr("Quit capture")
-                                  << QKeySequence(Qt::Key_Escape).toString());
+                                  << "Right Click | Esc");
 
     // Global hotkeys
 #if defined(Q_OS_MACOS)
@@ -203,18 +203,20 @@ void ShortcutsWidget::loadShortcuts()
     appendShortcut("SCREENSHOT_HISTORY", tr("Screenshot history"));
 #elif defined(Q_OS_WIN)
     m_shortcuts << (QStringList() << "" << QObject::tr("Screenshot history")
-                                  << "Shift+Print Screen");
+                                  << "Alt+Ct+Sh+Win + S");
     m_shortcuts << (QStringList()
-                    << "" << QObject::tr("Capture screen") << "Print Screen");
+                    << "" << QObject::tr("Capture screen") << "Shift+Print Screen");
+    m_shortcuts << (QStringList()
+                    << "" << QObject::tr("Change select area by window") << tr("Mouse Wheel"));
 #else
     // TODO - Linux doesn't support global shortcuts for (XServer and Wayland),
     // possibly it will be solved in the QHotKey library later. So it is
     // disabled for now.
 #endif
     m_shortcuts << (QStringList()
-                    << "" << QObject::tr("Show color picker") << "Right Click");
+                    << "" << QObject::tr("Show color picker") << tr("Ctrl+Right Click"));
     m_shortcuts << (QStringList() << "" << QObject::tr("Change the tool's size")
-                                  << "Mouse Wheel");
+                                  << tr("Ctrl+Mouse Wheel"));
 }
 
 void ShortcutsWidget::appendShortcut(const QString& shortcutName,

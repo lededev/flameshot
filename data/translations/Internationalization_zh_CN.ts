@@ -229,42 +229,58 @@
         <translation>鼠标滚轮</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="397"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="438"/>
+        <source>Change select area by window</source>
+        <translation>根据窗口改变选择区域</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="440"/>
         <source>Change tool size</source>
         <translation>改变工具大小</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="398"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="440"/>
+        <source>Ctrl+Mouse Wheel</source>
+        <translation>Ctrl+鼠标滚轮</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="441"/>
+        <source>Ctrl+Right Click</source>
+        <translation>Ctrl+鼠标右键</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="444"/>
         <source>Right Click</source>
         <translation>右键单击</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="398"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="441"/>
         <source>Show color picker</source>
         <translation>显示颜色选择器</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="400"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="443"/>
         <source>Open side panel</source>
         <translation>打开侧边栏</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="401"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="445"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="401"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="444"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="445"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="509"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="649"/>
         <source>Flameshot has lost focus. Keyboard shortcuts won&apos;t work until you click somewhere.</source>
         <translation>火焰截图丢失了屏幕焦点。您需要点击一次屏幕才能正常使用键盘快捷键。</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="515"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="655"/>
         <source>Configuration error resolved. Launch `flameshot gui` again to apply it.</source>
         <translation>已解决配置文件错误。请再次运行 `flameshot gui` 命令以应用更改。</translation>
     </message>
@@ -281,7 +297,7 @@ Press Space to open the side panel.</source>
 按下空格键以打开侧边面板。</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="949"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="1099"/>
         <source>Tool Settings</source>
         <translation>工具设置</translation>
     </message>
@@ -1185,17 +1201,45 @@ Please solve them manually in the configuration file.</source>
         <translation>双击以复制</translation>
     </message>
     <message>
-        <location filename="../../src/config/generalconf.cpp" line="421"/>
         <source>Enable Copy on Double Click</source>
-        <translation>启用双击时复制</translation>
+        <translation type="vanished">启用双击时复制</translation>
+    </message>
+    <message>
+        <source>Copy URL and close window after uploading was successful</source>
+        <translation type="vanished">上传成功后复制 URL 并关闭窗口</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="381"/>
+        <source>Automatically unload from memory when it is not needed</source>
+        <translation>不需要时自动从内存中释放</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="382"/>
+        <source>Automatically close daemon (background process) when it is not needed</source>
+        <translation>不需要时自动关闭后台进程</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="393"/>
+        <source>Launch in background at startup</source>
+        <translation>启动时运行在后台</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="394"/>
+        <source>Launch Flameshot daemon (background process) when computer is booted</source>
+        <translation>开机时启动后台服务</translation>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="434"/>
-        <source>Copy URL and close window after uploading was successful</source>
-        <translation>上传成功后复制 URL 并关闭窗口</translation>
+        <source>Enable Copy to clipboard on Double Click</source>
+        <translation>允许双击鼠标复制到剪贴板</translation>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="446"/>
+        <source>Copy URL after uploading was successful</source>
+        <translation>上传成功后复制URL</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="458"/>
         <source>After copying the screenshot, save it to a file as well</source>
         <translation>复制屏幕截图后，也将其保存到文件中</translation>
     </message>
@@ -1241,7 +1285,12 @@ Please solve them manually in the configuration file.</source>
         <translation>剪贴板使用 JPG 格式（默认为 PNG）</translation>
     </message>
     <message>
-        <location filename="../../src/config/generalconf.cpp" line="629"/>
+        <location filename="../../src/config/generalconf.cpp" line="614"/>
+        <source>Use lossy JPG format for clipboard (lossless PNG default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="644"/>
         <source>Copy file path after save</source>
         <translation>保存文件后复制文件路径</translation>
     </message>
@@ -1295,6 +1344,66 @@ Please solve them manually in the configuration file.</source>
         <location filename="../../src/config/generalconf.cpp" line="703"/>
         <source>Make the magnifier to be square-shaped</source>
         <translation>使放大镜呈方形</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="734"/>
+        <source>Milliseconds before geometry display hides; 0 means do not hide</source>
+        <translation>毫秒之后隐藏长宽显示；为0则不隐藏</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="737"/>
+        <source>Set geometry display timeout (ms)</source>
+        <translation>设置长宽显示超时（毫秒）</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="745"/>
+        <source>Selection Geometry Display</source>
+        <translation>选择长宽显示</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="752"/>
+        <source>Display Location</source>
+        <translation>显示位置</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="755"/>
+        <source>None</source>
+        <translation>无</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="756"/>
+        <source>Top Left</source>
+        <translation>左上角</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="758"/>
+        <source>Top Right</source>
+        <translation>右上角</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="760"/>
+        <source>Bottom Left</source>
+        <translation>左下角</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="762"/>
+        <source>Bottom Right</source>
+        <translation>右下角</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="764"/>
+        <source>Center</source>
+        <translation>居中</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="789"/>
+        <source>Quality range of 0-100; Higher number is better quality and larger file size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="793"/>
+        <source>JPEG Quality</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1750,6 +1859,36 @@ Please solve them manually in the configuration file.</source>
         <source>Save to file</source>
         <translation>保存到文件</translation>
     </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="307"/>
+        <source>Rotate Right</source>
+        <translation>顺时针旋转</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="312"/>
+        <source>Rotate Left</source>
+        <translation>逆时针旋转</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="317"/>
+        <source>Increase Opacity</source>
+        <translation>降低透明度</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="324"/>
+        <source>Decrease Opacity</source>
+        <translation>提高透明度</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="331"/>
+        <source>Hide Shadow</source>
+        <translation>隐藏窗口阴影</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="344"/>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
 </context>
 <context>
     <name>PixelateTool</name>
@@ -1878,7 +2017,17 @@ Please solve them manually in the configuration file.</source>
         <translation type="vanished">截图保存路径</translation>
     </message>
     <message>
-        <location filename="../../src/main.cpp" line="170"/>
+        <location filename="../../src/main.cpp" line="178"/>
+        <source>Capture screenshot of all monitors at the same time.</source>
+        <translation>同时对所有显示器截图</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="188"/>
+        <source>Capture a screenshot of the specified monitor.</source>
+        <translation>对特定显示器截图</translation>
+    </message>
+    <message>
+        <location filename="../../src/main.cpp" line="193"/>
         <source>Existing directory or new file to save to</source>
         <translation>要保存的目标目录路径或新文件</translation>
     </message>
@@ -2158,7 +2307,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>捕获屏幕</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="207"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="210"/>
+        <source>Change select area by window</source>
+        <translation type="unfinished">按窗口改变选择区域</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="217"/>
         <source>Show color picker</source>
         <translation>显示颜色选择器</translation>
     </message>
@@ -2220,10 +2374,30 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/utils/screengrabber.cpp" line="112"/>
         <source>Unable to detect desktop environment (GNOME? KDE? Sway? ...)</source>
-        <translation>无法探测当前桌面环境（GNOME？KDE？Sway？……）</translation>
+        <translation type="vanished">无法探测当前桌面环境（GNOME？KDE？Sway？……）</translation>
     </message>
     <message>
-        <location filename="../../src/utils/screengrabber.cpp" line="115"/>
+        <location filename="../../src/utils/screengrabber.cpp" line="44"/>
+        <source>The universal wayland screen capture adapter requires Grim as the screen capture component of wayland. If the screen capture component is missing, please install it!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/utils/screengrabber.cpp" line="136"/>
+        <source>If the USE_WAYLAND_GRIM option is not activated, the dbus protocol will be used. It should be noted that using the dbus protocol under wayland is not recommended. It is recommended to recompile with the USE_WAYLAND_GRIM flag to activate the grim-based general wayland screenshot adapter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/utils/screengrabber.cpp" line="145"/>
+        <source>grim&apos;s screenshot component is implemented based on wlroots, it may not be used in GNOME or similar desktop environments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/utils/screengrabber.cpp" line="155"/>
+        <source>Unable to detect desktop environment (GNOME? KDE? Qile? Sway? ...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/utils/screengrabber.cpp" line="158"/>
         <source>Hint: try setting the XDG_CURRENT_DESKTOP environment variable.</source>
         <translation>提示：请尝试设置 XDG_CURRENT_DESKTOP 环境变量。</translation>
     </message>
@@ -2327,7 +2501,27 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>将选区大小向下调整 1px</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="179"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="180"/>
+        <source>Symmetrically decrease width by 2px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="182"/>
+        <source>Symmetrically increase width by 2px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="184"/>
+        <source>Symmetrically increase height by 2px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="186"/>
+        <source>Symmetrically decrease height by 2px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="187"/>
         <source>Select entire screen</source>
         <translation>选择整个屏幕</translation>
     </message>
@@ -2371,6 +2565,21 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <source>Screenshot history</source>
         <translation>屏幕截图历史</translation>
     </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="210"/>
+        <source>Mouse Wheel</source>
+        <translation>鼠标滚轮</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="217"/>
+        <source>Ctrl+Right Click</source>
+        <translation>Ctrl+鼠标右键</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="219"/>
+        <source>Ctrl+Mouse Wheel</source>
+        <translation>Ctrl+鼠标滚轮</translation>
+    </message>
 </context>
 <context>
     <name>SidePanelWidget</name>
@@ -2400,6 +2609,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <location filename="../../src/widgets/panel/sidepanelwidget.cpp" line="68"/>
         <source>Grab Color</source>
         <translation>获取颜色</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/panel/sidepanelwidget.cpp" line="85"/>
+        <source>Display grid</source>
+        <translation>显示网格</translation>
     </message>
 </context>
 <context>
@@ -2653,6 +2867,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <location filename="../../src/widgets/trayicon.cpp" line="149"/>
         <source>&amp;Latest Uploads</source>
         <translation>最近的上传(&amp;L)</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/trayicon.cpp" line="159"/>
+        <source>&amp;Open Save Path</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
