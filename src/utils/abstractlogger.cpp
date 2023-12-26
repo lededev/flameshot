@@ -64,12 +64,20 @@ AbstractLogger& AbstractLogger::sendMessage(const QString& msg, Channel channel)
     if (m_targets & LogFile) {
         // TODO
     }
+#ifndef Q_OS_WIN
+    if (m_targets & Stderr) {
+#else
     if (m_targets & Stderr && checkWinInit()) {
+#endif
         QTextStream stream(stderr);
         stream << messageHeader(channel, Stderr) << msg << "\n";
     }
 
+#ifndef Q_OS_WIN
+    if (m_targets & Stdout) {
+#else
     if (m_targets & Stdout && checkWinInit()) {
+#endif
         QTextStream stream(stdout);
         stream << messageHeader(channel, Stdout) << msg << "\n";
     }

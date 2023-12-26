@@ -278,10 +278,10 @@ CaptureWidget::~CaptureWidget()
     if (m_captureDone) {
         auto lastRegion = m_selection->geometry();
         setLastRegion(lastRegion);
-        QRect selGeometry(m_context.selection);
-        selGeometry.moveTo(selGeometry.topLeft() + m_context.widgetOffset);
+        QRect geometry(m_context.selection);
+        geometry.moveTo(geometry.topLeft() + m_context.widgetOffset);
         Flameshot::instance()->exportCapture(
-          pixmap(), selGeometry, m_context.request);
+          pixmap(), geometry, m_context.request);
     } else {
         emit Flameshot::instance()->captureFailed();
     }
@@ -762,7 +762,7 @@ void CaptureWidget::mousePressEvent(QMouseEvent* e)
     }
 
     if (e->button() == Qt::RightButton) {
-        if ( m_adjustmentButtonPressed || e->modifiers().testFlag(Qt::ControlModifier)) {
+        if (m_adjustmentButtonPressed || e->modifiers().testFlag(Qt::ControlModifier)) {
             showColorPicker(m_mousePressedPos);
             return;
         }
@@ -986,7 +986,7 @@ void CaptureWidget::keyPressEvent(QKeyEvent* e)
     } else if (e->key() == Qt::Key_Control) {
         m_adjustmentButtonPressed = true;
         updateCursor();
-    } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return ) {
+    } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
         if (m_config.enterKeyPin()) {
             PinTool pinTool;
             connect(&pinTool,
@@ -1976,7 +1976,7 @@ void CaptureWidget::drawInactiveRegion(QPainter* painter)
 void CaptureWidget::changeCaptureRectSize(bool down)
 {
 #ifdef Q_OS_WIN
-    auto pos = QCursor::pos();
+    const auto pos = QCursor::pos();
     std::vector<BRECT> ansRects;
     for (auto& r : m_allWinData.rects)
     {
@@ -2014,9 +2014,9 @@ void CaptureWidget::changeCaptureRectSize(bool down)
     }
     if (m_rectSelectLevel >= ansRects.size())
         return;
-    auto r = ansRects.at(m_rectSelectLevel).rect;
-    QPoint s(r.left, r.top);
-    QPoint e(r.right, r.bottom);
+    const auto r = ansRects.at(m_rectSelectLevel).rect;
+    const QPoint s(r.left, r.top);
+    const QPoint e(r.right, r.bottom);
     QRect rect(s, e);
     rect.moveTo(rect.topLeft() - mapToGlobal(QPoint(0, 0)));
     qDebug() << "At Pos: " << pos.x() << "," << pos.y() <<
@@ -2055,11 +2055,11 @@ void CaptureWidget::saveCurrentAllChildWnd(HWND hwnd)
     EnumChildWindows(hwnd, [](HWND hwnd, LPARAM lParam) -> BOOL {
             if (NULL == lParam)
                 return TRUE;
-            BRECT br{ false };
-            GetWindowRect(hwnd, &(br.rect));
+            BRECT brect{ false };
+            GetWindowRect(hwnd, &(brect.rect));
             lpData_t * pData = reinterpret_cast<lpData_t*>(lParam);
             if (pData)
-                pData->rects.insert(br);
+                pData->rects.insert(brect);
             return TRUE;
         }, reinterpret_cast<LPARAM>(&m_allWinData)
     );
@@ -2071,24 +2071,24 @@ void CaptureWidget::saveCurrentAllWnd()
     EnumWindows([](HWND hwnd, LPARAM lparam) -> BOOL {
             if (NULL == lparam)
                 return TRUE;
-            auto pdata = reinterpret_cast<std::vector<HWND> *>(lparam);
-            pdata->push_back(hwnd);
+            const auto pWin = reinterpret_cast<std::vector<HWND> *>(lparam);
+            pWin->push_back(hwnd);
             return TRUE;
         }, reinterpret_cast<LPARAM>(&win)
     );
     const auto cyEdge = GetSystemMetrics(SM_CYEDGE);
     const auto cxEdge = GetSystemMetrics(SM_CXEDGE);
-    for (auto h : win) {
-        BRECT br{ true };
-        GetWindowRect(h, &(br.rect));
-        LONG classStyle = GetClassLong(h, GCL_STYLE);
+    for (const auto hwnd : win) {
+        BRECT brect{ true };
+        GetWindowRect(hwnd, &(brect.rect));
+        const LONG classStyle = GetClassLong(hwnd, GCL_STYLE);
         if (classStyle & (CS_DROPSHADOW | CS_BYTEALIGNWINDOW)) {
-            br.rect.left += cxEdge;
-            br.rect.right -= cxEdge;
-            br.rect.bottom -= cyEdge;
+            brect.rect.left += cxEdge;
+            brect.rect.right -= cxEdge;
+            brect.rect.bottom -= cyEdge;
         }
-        m_allWinData.rects.insert(br);
-        saveCurrentAllChildWnd(h);
+        m_allWinData.rects.insert(brect);
+        saveCurrentAllChildWnd(hwnd);
     }
 #ifdef QT_DEBUG0
     if (!m_lpAllWinData.rects.size())

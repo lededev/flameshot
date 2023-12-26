@@ -45,7 +45,6 @@ public:
 
 private:
     QString messageHeader(Channel channel, Target target);
-    bool checkWinInit();
 
     int m_targets;
     Channel m_defaultChannel;
@@ -53,6 +52,7 @@ private:
     QString m_notificationPath;
     bool m_enableMessageHeader = true;
 #ifdef Q_OS_WIN
+    bool checkWinInit();
     bool m_bWinInit = false;
 #else
     bool m_bWinInit = true;

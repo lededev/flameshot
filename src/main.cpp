@@ -71,16 +71,16 @@ void requestCaptureAndWait(const CaptureRequest& req)
     qApp->exec();
 #else
     QByteArray argsBytes;
-    auto sz = sizeof(CaptureRequest);
+    const auto sz = sizeof(CaptureRequest);
     argsBytes.resize(static_cast<int>(sz));
     memcpy_s(argsBytes.data(), sz, &req, sz);
-    auto pApp = dynamic_cast<SingleApplication*>(SingleApplication::instance());
+    const auto pApp = dynamic_cast<SingleApplication*>(SingleApplication::instance());
     if (pApp->isSecondary()) {
         pApp->sendMessage(argsBytes);
         return;
     }
 
-    auto c = Flameshot::instance();
+    Flameshot::instance();
     FlameshotDaemon::start();
     QObject::connect(pApp,
                          &SingleApplication::receivedMessage,
