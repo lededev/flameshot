@@ -15,6 +15,9 @@ public:
     QAction* appUpdates();
 #endif
 
+public slots:
+    void receivedMessage(int instanceId, QByteArray message);
+
 private:
     void initTrayIcon();
     void initMenu();

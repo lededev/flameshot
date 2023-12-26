@@ -18,6 +18,7 @@
 #include "src/utils/filenamehandler.h"
 #include "src/utils/pathinfo.h"
 #include "src/utils/valuehandler.h"
+#include "src/widgets/trayicon.h"
 #include <QApplication>
 #include <QDir>
 #include <QLibraryInfo>
@@ -140,10 +141,14 @@ int main(int argc, char* argv[])
     // no arguments, just launch Flameshot
     if (argc == 1) {
 #ifndef USE_EXTERNAL_SINGLEAPPLICATION
-        SingleApplication app(argc, argv);
+        SingleApplication app(argc, argv, true, SingleApplication::ExcludeAppPath | SingleApplication::User);
 #else
         QtSingleApplication app(argc, argv);
 #endif
+        if (app.isSecondary()) {
+            //app.sendMessage(app.arguments().join(' ').toUtf8());
+            return 0;
+        }
         configureApp(true);
         auto c = Flameshot::instance();
         FlameshotDaemon::start();
@@ -158,7 +163,11 @@ int main(int argc, char* argv[])
         dbus.registerObject(QStringLiteral("/"), c);
         dbus.registerService(QStringLiteral("org.flameshot.Flameshot"));
 #endif
-        return qApp->exec();
+        QObject::connect(&app,
+                    &SingleApplication::receivedMessage,
+                    FlameshotDaemon::instance()->getTrayIcon(),
+                    &TrayIcon::receivedMessage);
+        return app.exec();
     }
 
 #if !defined(Q_OS_WIN)
@@ -575,7 +584,23 @@ int main(int argc, char* argv[])
         }
     }
 finish:
-
-#endif
     return 0;
+#else // Q_OS_WIN
+    SingleApplication app(argc, argv, true, SingleApplication::ExcludeAppPath | SingleApplication::User);
+    static auto arg1n = app.arguments().mid(1).join(' ').toUtf8();
+    if (app.isSecondary()) {
+        app.sendMessage(arg1n);
+        return 0;
+    }
+    configureApp(true);
+    auto c = Flameshot::instance();
+    FlameshotDaemon::start();
+    QObject::connect(&app,
+                         &SingleApplication::receivedMessage,
+                         FlameshotDaemon::instance()->getTrayIcon(),
+                         &TrayIcon::receivedMessage);
+    emit app.receivedMessage(app.instanceId(), arg1n);
+    //QTimer::singleShot(200, [&]() { emit app.receivedMessage(app.instanceId(), arg1n); });
+    return app.exec();
+#endif
 }

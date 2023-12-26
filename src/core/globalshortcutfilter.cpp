@@ -35,7 +35,7 @@ bool GlobalShortcutFilter::nativeEventFilter(const QByteArray& eventType,
         const quint32 modifiers = LOWORD(msg->lParam);
 
         // Show screenshots history
-        if ('S' == keycode && MOD_ALT|MOD_SHIFT|MOD_CONTROL|MOD_WIN == modifiers) {
+        if (('S' == keycode) && ((MOD_ALT|MOD_SHIFT|MOD_CONTROL|MOD_WIN) == modifiers)) {
             Flameshot::instance()->history();
         }
 

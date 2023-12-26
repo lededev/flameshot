@@ -198,3 +198,11 @@ void TrayIcon::startGuiCapture()
     FlameshotDaemon::instance()->showUpdateNotificationIfAvailable(widget);
 #endif
 }
+
+void TrayIcon::receivedMessage(int instanceId, QByteArray message)
+{
+    auto m = message.toLower().trimmed();
+    if (m.startsWith("gui") || m.startsWith("snip")) {
+        startGuiCapture();
+    }
+}

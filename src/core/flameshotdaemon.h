@@ -28,6 +28,7 @@ public:
     static void copyToClipboard(const QString& text,
                                 const QString& notification = "");
     static bool isThisInstanceHostingWidgets();
+    TrayIcon* getTrayIcon() { return m_trayIcon; };
 
     void sendTrayNotification(
       const QString& text,
