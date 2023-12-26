@@ -1,0 +1,3 @@
+[submodule "external/singleapplication"]
+	path = external/singleapplication
+	url = https://github.com/itay-grudev/SingleApplication.git
