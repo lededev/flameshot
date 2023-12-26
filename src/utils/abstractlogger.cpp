@@ -4,6 +4,11 @@
 
 #include <QFileInfo>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <consoleapi.h>
+#endif
+
 AbstractLogger::AbstractLogger(Channel channel, int targets)
   : m_defaultChannel(channel)
   , m_targets(targets)
@@ -59,12 +64,12 @@ AbstractLogger& AbstractLogger::sendMessage(const QString& msg, Channel channel)
     if (m_targets & LogFile) {
         // TODO
     }
-    if (m_targets & Stderr) {
+    if (m_targets & Stderr && checkWinInit()) {
         QTextStream stream(stderr);
         stream << messageHeader(channel, Stderr) << msg << "\n";
     }
 
-    if (m_targets & Stdout) {
+    if (m_targets & Stdout && checkWinInit()) {
         QTextStream stream(stdout);
         stream << messageHeader(channel, Stdout) << msg << "\n";
     }
@@ -135,4 +140,20 @@ QString AbstractLogger::messageHeader(Channel channel, Target target)
     } else {
         return "flameshot: " + messageChannel + ": ";
     }
+}
+
+bool AbstractLogger::checkWinInit()
+{
+#ifdef Q_OS_WIN
+    if (!m_bWinInit) {
+        if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+            freopen("CONOUT$", "w", stdout);
+            freopen("CONOUT$", "w", stderr);
+            setbuf(stdout, NULL);
+            setbuf(stderr, NULL);
+            m_bWinInit = true;
+        }
+    }
+#endif
+    return m_bWinInit;
 }

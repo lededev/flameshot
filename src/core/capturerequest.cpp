@@ -57,6 +57,11 @@ QRect CaptureRequest::initialSelection() const
     return m_initialSelection;
 }
 
+QRect CaptureRequest::pinWindowGeometry() const
+{
+    return m_pinWindowGeometry;
+}
+
 void CaptureRequest::addTask(CaptureRequest::ExportTask task)
 {
     if (task == SAVE) {

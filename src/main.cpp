@@ -48,6 +48,7 @@ void wayland_hacks()
 
 void requestCaptureAndWait(const CaptureRequest& req)
 {
+#if !defined(Q_OS_WIN)
     Flameshot* flameshot = Flameshot::instance();
     flameshot->requestCapture(req);
     QObject::connect(flameshot, &Flameshot::captureTaken, [&](const QPixmap&) {
@@ -68,6 +69,26 @@ void requestCaptureAndWait(const CaptureRequest& req)
         qApp->exit(1);
     });
     qApp->exec();
+#else
+    QByteArray argsBytes;
+    auto sz = sizeof(CaptureRequest);
+    argsBytes.resize(static_cast<int>(sz));
+    memcpy_s(argsBytes.data(), sz, &req, sz);
+    auto pApp = dynamic_cast<SingleApplication*>(SingleApplication::instance());
+    if (pApp->isSecondary()) {
+        pApp->sendMessage(argsBytes);
+        return;
+    }
+
+    auto c = Flameshot::instance();
+    FlameshotDaemon::start();
+    QObject::connect(pApp,
+                         &SingleApplication::receivedMessage,
+                         FlameshotDaemon::instance()->getTrayIcon(),
+                         &TrayIcon::receivedMessage);
+    emit pApp->receivedMessage(pApp->instanceId(), argsBytes);
+    pApp->exec();
+#endif
 }
 
 QSharedMemory* guiMutexLock()
@@ -120,8 +141,15 @@ void configureApp(bool gui)
 /// Recreate the application as a QApplication
 void reinitializeAsQApplication(int& argc, char* argv[])
 {
+#if !defined(Q_OS_WIN)
     delete QCoreApplication::instance();
     new QApplication(argc, argv);
+#else
+//    delete SingleApplication::instance();
+//    new SingleApplication(argc, argv, true, SingleApplication::ExcludeAppPath | SingleApplication::User);
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+#endif
     configureApp(true);
 }
 
@@ -169,11 +197,14 @@ int main(int argc, char* argv[])
         return app.exec();
     }
 
-#if !defined(Q_OS_WIN)
     /*--------------|
      * CLI parsing  |
      * ------------*/
+#if defined(Q_OS_WIN)
+    new SingleApplication(argc, argv, true, SingleApplication::ExcludeAppPath | SingleApplication::User);
+#else
     new QCoreApplication(argc, argv);
+#endif
     configureApp(false);
     CommandLineParser parser;
     // Add description
@@ -378,6 +409,7 @@ int main(int argc, char* argv[])
         reinitializeAsQApplication(argc, argv);
         // Prevent multiple instances of 'flameshot gui' from running if not
         // configured to do so.
+#if !defined(Q_OS_WIN)
         if (!ConfigHandler().allowMultipleGuiInstances()) {
             auto* mutex = guiMutexLock();
             if (!mutex) {
@@ -389,6 +421,7 @@ int main(int argc, char* argv[])
                   delete mutex;
               });
         }
+#endif
 
         // Option values
         QString path = parser.value(pathOption);
@@ -584,21 +617,4 @@ int main(int argc, char* argv[])
     }
 finish:
     return 0;
-#else // Q_OS_WIN
-    SingleApplication app(argc, argv, true, SingleApplication::ExcludeAppPath | SingleApplication::User);
-    static auto arg1n = app.arguments().mid(1).join(' ').toUtf8();
-    if (app.isSecondary()) {
-        app.sendMessage(arg1n);
-        return 0;
-    }
-    configureApp(true);
-    auto c = Flameshot::instance();
-    FlameshotDaemon::start();
-    QObject::connect(&app,
-                         &SingleApplication::receivedMessage,
-                         FlameshotDaemon::instance()->getTrayIcon(),
-                         &TrayIcon::receivedMessage);
-    emit app.receivedMessage(app.instanceId(), arg1n);
-    return app.exec();
-#endif
 }

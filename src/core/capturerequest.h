@@ -43,6 +43,7 @@ public:
     CaptureMode captureMode() const;
     ExportTask tasks() const;
     QRect initialSelection() const;
+    QRect pinWindowGeometry() const;
 
     void addTask(ExportTask task);
     void removeTask(ExportTask task);

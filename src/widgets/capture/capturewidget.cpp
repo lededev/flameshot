@@ -1998,7 +1998,7 @@ void CaptureWidget::changeCaptureRectSize(bool down)
         else {
             m_rectSelectLevel = (m_rectSelectLevel > 0) ?
                 m_rectSelectLevel - 1:
-                m_rectSelectLevel = ansRects.size() - 1;
+                m_rectSelectLevel = static_cast<uint32_t>(ansRects.size()) - 1;
         }
     }
     else {

@@ -45,10 +45,16 @@ public:
 
 private:
     QString messageHeader(Channel channel, Target target);
+    bool checkWinInit();
 
     int m_targets;
     Channel m_defaultChannel;
     QList<QTextStream*> m_textStreams;
     QString m_notificationPath;
     bool m_enableMessageHeader = true;
+#ifdef Q_OS_WIN
+    bool m_bWinInit = false;
+#else
+    bool m_bWinInit = true;
+#endif
 };
