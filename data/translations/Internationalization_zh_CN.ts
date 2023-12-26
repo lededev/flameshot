@@ -1295,9 +1295,9 @@ Please solve them manually in the configuration file.</source>
         <translation>剪贴板使用 JPG 格式（默认为 PNG）</translation>
     </message>
     <message>
-        <location filename="../../src/config/generalconf.cpp" line="614"/>
+        <location filename="../../src/config/generalconf.cpp" line="628"/>
         <source>Use lossy JPG format for clipboard (lossless PNG default)</source>
-        <translation type="unfinished"></translation>
+        <translation>剪贴板使用有损JPG（默认无损PNG）格式</translation>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="644"/>
@@ -2312,7 +2312,17 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation type="vanished">删除当前工具</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="189"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="207"/>
+        <source>Select Window small to big</source>
+        <translation>窗口框选：从小到大</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="209"/>
+        <source>Select Window app to small</source>
+        <translation>窗口框选：从主窗到小</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="211"/>
         <source>Quit capture</source>
         <translation>退出捕获</translation>
     </message>
@@ -2581,7 +2591,27 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>删除当前工具</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="194"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="202"/>
+        <source>Select Window small to big</source>
+        <translation>窗口框选：从小到大</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="203"/>
+        <source>Select Window app to small</source>
+        <translation>窗口框选：从主窗到小</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="208"/>
+        <source>Mouse Wheel Up</source>
+        <translation>鼠标滚轮向上</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="210"/>
+        <source>Mouse Wheel Down</source>
+        <translation>鼠标滚轮向下</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="216"/>
         <source>Capture screen</source>
         <translation>捕获屏幕</translation>
     </message>

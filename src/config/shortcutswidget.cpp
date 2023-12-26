@@ -198,8 +198,16 @@ void ShortcutsWidget::loadShortcuts()
     appendShortcut("TYPE_COMMIT_CURRENT_TOOL", tr("Commit text in text area"));
     appendShortcut("TYPE_DELETE_CURRENT_TOOL", tr("Delete current tool"));
 
+#if defined(Q_OS_WIN)
+    appendShortcut("TYPE_SELECT_WIN_UP", tr("Select Window small to big"));
+    appendShortcut("TYPE_SELECT_WIN_DOWN", tr("Select Window app to small"));
+#endif
     // non-editable shortcuts have an empty shortcut name
 
+    m_shortcuts << (QStringList() << "" << QObject::tr("Select Window small to big")
+                                  << tr("Mouse Wheel Up"));
+    m_shortcuts << (QStringList() << "" << QObject::tr("Select Window app to small")
+                                  << tr("Mouse Wheel Down"));
     m_shortcuts << (QStringList() << "" << QObject::tr("Quit capture")
                                   << "Right Click | Esc");
 
@@ -212,8 +220,6 @@ void ShortcutsWidget::loadShortcuts()
                                   << "Alt+Ct+Sh+Win + S");
     m_shortcuts << (QStringList()
                     << "" << QObject::tr("Capture screen") << "Shift+Print Screen");
-    m_shortcuts << (QStringList()
-                    << "" << QObject::tr("Change select area by window") << tr("Mouse Wheel"));
 #else
     // TODO - Linux doesn't support global shortcuts for (XServer and Wayland),
     // possibly it will be solved in the QHotKey library later. So it is

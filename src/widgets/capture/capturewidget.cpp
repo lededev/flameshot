@@ -1608,6 +1608,16 @@ void CaptureWidget::initShortcuts()
                 this,
                 SLOT(selectAll()));
 
+#if defined(Q_OS_WIN)
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_SELECT_WIN_UP")),
+                this,
+                SLOT(selectWinUp()));
+
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_SELECT_WIN_DOWN")),
+                this,
+                SLOT(selectWinDown()));
+#endif
+
     newShortcut(Qt::Key_Escape, this, SLOT(deleteToolWidgetOrClose()));
 }
 
@@ -2094,4 +2104,15 @@ void CaptureWidget::saveCurrentAllWnd()
     }
 #endif
 }
+
+void CaptureWidget::selectWinUp()
+{
+    changeCaptureRectSize(false);
+}
+
+void CaptureWidget::selectWinDown()
+{
+    changeCaptureRectSize(true);
+}
+
 #endif

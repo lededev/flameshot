@@ -98,6 +98,10 @@ private slots:
     void xywhTick();
     void onDisplayGridChanged(bool display);
     void onGridSizeChanged(int size);
+#if defined(Q_OS_WIN)
+    void selectWinUp();
+    void selectWinDown();
+#endif
 
 public:
     void removeToolObject(int index = -1);

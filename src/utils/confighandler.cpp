@@ -179,6 +179,10 @@ static QMap<QString, QSharedPointer<KeySequence>> recognizedShortcuts = {
     SHORTCUT("TYPE_SIZEINCREASE"        ,                           ),
     SHORTCUT("TYPE_SIZEDECREASE"        ,                           ),
     SHORTCUT("TYPE_CIRCLECOUNT"         ,                           ),
+#if defined(Q_OS_WIN)
+    SHORTCUT("TYPE_SELECT_WIN_UP"       ,   "Shift+S"               ),
+    SHORTCUT("TYPE_SELECT_WIN_DOWN"     ,   "Shift+D"               ),
+#endif
 };
 // clang-format on
 
