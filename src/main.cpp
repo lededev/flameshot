@@ -146,7 +146,6 @@ int main(int argc, char* argv[])
         QtSingleApplication app(argc, argv);
 #endif
         if (app.isSecondary()) {
-            //app.sendMessage(app.arguments().join(' ').toUtf8());
             return 0;
         }
         configureApp(true);
@@ -600,7 +599,6 @@ finish:
                          FlameshotDaemon::instance()->getTrayIcon(),
                          &TrayIcon::receivedMessage);
     emit app.receivedMessage(app.instanceId(), arg1n);
-    //QTimer::singleShot(200, [&]() { emit app.receivedMessage(app.instanceId(), arg1n); });
     return app.exec();
 #endif
 }
