@@ -76,15 +76,15 @@ static QMap<class QString, QSharedPointer<ValueHandler>>
 //         KEY                            TYPE                 DEFAULT_VALUE
     OPTION("showHelp"                    ,Bool               ( true          )),
     OPTION("showSidePanelButton"         ,Bool               ( true          )),
-    OPTION("showDesktopNotification"     ,Bool               ( true          )),
+    OPTION("showDesktopNotification"     ,Bool               ( false         )),
     OPTION("disabledTrayIcon"            ,Bool               ( false         )),
     OPTION("historyConfirmationToDelete" ,Bool               ( true          )),
 #if !defined(DISABLE_UPDATE_CHECKER)
     OPTION("checkForUpdates"             ,Bool               ( true          )),
 #endif
     OPTION("allowMultipleGuiInstances"   ,Bool               ( false         )),
-    OPTION("showMagnifier"               ,Bool               ( false         )),
-    OPTION("squareMagnifier"             ,Bool               ( false         )),
+    OPTION("showMagnifier"               ,Bool               ( true          )),
+    OPTION("squareMagnifier"             ,Bool               ( true          )),
 #if !defined(Q_OS_WIN)
     OPTION("autoCloseIdleDaemon"         ,Bool               ( false         )),
 #endif
@@ -103,9 +103,9 @@ static QMap<class QString, QSharedPointer<ValueHandler>>
     OPTION("uploadHistoryMax"            ,LowerBoundedInt    (0, 25               )),
     OPTION("undoLimit"                   ,BoundedInt         (0, 999, 100    )),
   // Interface tab
-    OPTION("uiColor"                     ,Color              ( {116, 0, 150}   )),
+    OPTION("uiColor"                     ,Color              ( {31, 127, 49} )),
     OPTION("contrastUiColor"             ,Color              ( {39, 0, 50}     )),
-    OPTION("contrastOpacity"             ,BoundedInt         ( 0, 255, 190    )),
+    OPTION("contrastOpacity"             ,BoundedInt         ( 0, 255, 63    )),
     OPTION("buttons"                     ,ButtonList         ( {}            )),
     // Filename Editor tab
     OPTION("filenamePattern"             ,FilenamePattern    ( {}            )),
