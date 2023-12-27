@@ -1860,44 +1860,49 @@ Please solve them manually in the configuration file.</source>
         <translation>上下文菜单</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="227"/>
-        <source>Copy to clipboard</source>
-        <translation>复制到剪贴板</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="294"/>
+        <source>&amp;Copy to clipboard</source>
+        <translation>复制(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="234"/>
-        <source>Save to file</source>
-        <translation>保存到文件</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="301"/>
+        <source>&amp;Save to file</source>
+        <translation>存盘(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="307"/>
-        <source>Rotate Right</source>
-        <translation>顺时针旋转</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="306"/>
+        <source>&amp;Edit</source>
+        <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="312"/>
-        <source>Rotate Left</source>
-        <translation>逆时针旋转</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="321"/>
+        <source>Rotate &amp;Right</source>
+        <translation>顺时针旋转(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="317"/>
-        <source>Increase Opacity</source>
-        <translation>降低透明度</translation>
-    </message>
-    <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="324"/>
-        <source>Decrease Opacity</source>
-        <translation>提高透明度</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="326"/>
+        <source>Rotate &amp;Left</source>
+        <translation>逆时针旋转(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/tools/pin/pinwidget.cpp" line="331"/>
-        <source>Hide Shadow</source>
-        <translation>隐藏窗口阴影</translation>
+        <source>&amp;Increase Opacity</source>
+        <translation>减少透明度(&amp;I)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="344"/>
-        <source>Close</source>
-        <translation type="unfinished">关闭</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="338"/>
+        <source>&amp;Decrease Opacity</source>
+        <translation>增加透明度(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="345"/>
+        <source>&amp;Hide Shadow</source>
+        <translation>隐藏窗口阴影(&amp;H)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="359"/>
+        <source>Cl&amp;ose</source>
+        <translation>关闭(&amp;O)</translation>
     </message>
 </context>
 <context>
@@ -2891,12 +2896,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="98"/>
         <source>&amp;Take Screenshot</source>
-        <translation>进行截图(&amp;T)</translation>
+        <translation>抓屏(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="116"/>
         <source>&amp;Open Launcher</source>
-        <translation>打开启动器(&amp;O)</translation>
+        <translation>启动器(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="121"/>
@@ -2926,12 +2931,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="149"/>
         <source>&amp;Latest Uploads</source>
-        <translation>最近的上传(&amp;L)</translation>
+        <translation>查看上传记录(&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/widgets/trayicon.cpp" line="159"/>
         <source>Open &amp;Save Path</source>
-        <translation>打开截图目录(&amp;S)</translation>
+        <translation>抓屏文件夹(&amp;S)</translation>
     </message>
 </context>
 <context>

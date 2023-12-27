@@ -256,7 +256,8 @@ CaptureWidget::CaptureWidget(const CaptureRequest& req,
 
     if (m_config.showHelp()) {
         initHelpMessage();
-        OverlayMessage::push(m_helpMessage);
+        if (req.initialSelection().isNull())
+            OverlayMessage::push(m_helpMessage);
     }
 
     updateCursor();

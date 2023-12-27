@@ -16,6 +16,7 @@
 #include <QShortcut>
 #include <QVBoxLayout>
 #include <QWheelEvent>
+#include <flameshot.h>
 
 namespace {
 constexpr int MARGIN = 7;
@@ -290,58 +291,72 @@ void PinWidget::showContextMenu(const QPoint& pos)
 {
     QMenu contextMenu(tr("Context menu"), this);
 
-    QAction copyToClipboardAction(tr("Copy to clipboard"), this);
+    QAction copyToClipboardAction(tr("&Copy to clipboard"), this);
     connect(&copyToClipboardAction,
             &QAction::triggered,
             this,
-            &PinWidget::copyToClipboard);
+            [=](){ saveToClipboard(m_pixmap); });
     contextMenu.addAction(&copyToClipboardAction);
 
-    QAction saveToFileAction(tr("Save to file"), this);
+    QAction saveToFileAction(tr("&Save to file"), this);
     connect(
       &saveToFileAction, &QAction::triggered, this, &PinWidget::saveToFile);
     contextMenu.addAction(&saveToFileAction);
 
+    QAction editAction(tr("&Edit"), this);
+    connect(
+      &editAction, &QAction::triggered, this,
+        [=](){
+            CaptureRequest req(CaptureRequest::GRAPHICAL_MODE);
+            req.addTask(CaptureRequest::PIN);
+            req.setInitialSelection(geometry() - layout()->contentsMargins());
+            Flameshot::instance()->requestCapture(req);
+            connect(Flameshot::instance(), &Flameshot::captureTaken, this,
+                [=]() { close(); });
+        });
+    contextMenu.addAction(&editAction);
+
     contextMenu.addSeparator();
 
-    QAction rotateRightAction(tr("Rotate Right"), this);
+    QAction rotateRightAction(tr("Rotate &Right"), this);
     connect(
       &rotateRightAction, &QAction::triggered, this, &PinWidget::rotateRight);
     contextMenu.addAction(&rotateRightAction);
 
-    QAction rotateLeftAction(tr("Rotate Left"), this);
+    QAction rotateLeftAction(tr("Rotate &Left"), this);
     connect(
       &rotateLeftAction, &QAction::triggered, this, &PinWidget::rotateLeft);
     contextMenu.addAction(&rotateLeftAction);
 
-    QAction increaseOpacityAction(tr("Increase Opacity"), this);
+    QAction increaseOpacityAction(tr("&Increase Opacity"), this);
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
             &PinWidget::increaseOpacity);
     contextMenu.addAction(&increaseOpacityAction);
 
-    QAction decreaseOpacityAction(tr("Decrease Opacity"), this);
+    QAction decreaseOpacityAction(tr("&Decrease Opacity"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
             &PinWidget::decreaseOpacity);
     contextMenu.addAction(&decreaseOpacityAction);
 
-    QAction hideShadowAction(tr("Hide Shadow"), this);
+    QAction hideShadowAction(tr("&Hide Shadow"), this);
     if (m_shadowEffect && m_shadowEffect->isEnabled()) {
         connect(&hideShadowAction,
             &QAction::triggered,
             this,
             [=]() {
+                if (m_shadowEffect == nullptr)
+                    return;
                 m_shadowEffect->setEnabled(false);
-                setGraphicsEffect(nullptr);
                 m_shadowEffect = nullptr;
             });
         contextMenu.addAction(&hideShadowAction);
     }
 
-    QAction closePinAction(tr("Close"), this);
+    QAction closePinAction(tr("Cl&ose"), this);
     connect(&closePinAction, &QAction::triggered, this, &PinWidget::closePin);
     contextMenu.addSeparator();
     contextMenu.addAction(&closePinAction);
@@ -349,10 +364,6 @@ void PinWidget::showContextMenu(const QPoint& pos)
     contextMenu.exec(mapToGlobal(pos));
 }
 
-void PinWidget::copyToClipboard()
-{
-    saveToClipboard(m_pixmap);
-}
 void PinWidget::saveToFile()
 {
     hide();
