@@ -50,6 +50,8 @@ public:
     void addSaveTask(const QString& path = QString());
     void addPinTask(const QRect& pinWindowGeometry);
     void setInitialSelection(const QRect& selection);
+    void toByteArray(QByteArray& arr) const;
+    bool fromByteArray(QByteArray& arr);
 
 private:
     CaptureMode m_mode;

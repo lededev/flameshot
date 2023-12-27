@@ -71,9 +71,8 @@ void requestCaptureAndWait(const CaptureRequest& req)
     qApp->exec();
 #else
     QByteArray argsBytes;
-    const auto sz = sizeof(CaptureRequest);
-    argsBytes.resize(static_cast<int>(sz));
-    memcpy_s(argsBytes.data(), sz, &req, sz);
+    req.toByteArray(argsBytes);
+
     const auto pApp = dynamic_cast<SingleApplication*>(SingleApplication::instance());
     if (pApp->isSecondary()) {
         pApp->sendMessage(argsBytes);

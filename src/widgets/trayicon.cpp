@@ -201,17 +201,9 @@ void TrayIcon::startGuiCapture()
 
 void TrayIcon::receivedMessage(int instanceId, QByteArray message)
 {
-    if (message.size() != sizeof(CaptureRequest))
+    CaptureRequest req(CaptureRequest::GRAPHICAL_MODE);
+    if (!req.fromByteArray(message))
         return;
-
-    const auto pCR = static_cast<CaptureRequest*>(static_cast<void*>(message.data()));
-    // TODO: still not support send QString by mesasge, may replace with Protocol Buffers
-    if (pCR->tasks() & CaptureRequest::SAVE)
-        return;
-    CaptureRequest req(CaptureRequest::GRAPHICAL_MODE, pCR->delay(), QVariant(), pCR->tasks());
-    req.setInitialSelection(pCR->initialSelection());
-    if (pCR->tasks() & CaptureRequest::PIN)
-        req.addPinTask(pCR->pinWindowGeometry());
 
     Flameshot::instance()->requestCapture(req);
 }

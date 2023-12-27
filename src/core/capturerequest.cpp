@@ -91,3 +91,37 @@ void CaptureRequest::setInitialSelection(const QRect& selection)
 {
     m_initialSelection = selection;
 }
+
+void CaptureRequest::toByteArray(QByteArray& arr) const
+{
+    QDataStream qd(&arr, QIODevice::WriteOnly);
+    QString vF0("F0"), vF9("F9");
+    qd << vF0
+        << m_mode << m_delay << m_path << m_tasks
+        << m_pinWindowGeometry << m_initialSelection << vF9;
+}
+
+bool CaptureRequest::fromByteArray(QByteArray& arr)
+{
+    QDataStream qd(&arr, QIODevice::ReadOnly);
+    QString vF0, vF9;
+
+    CaptureMode mode;
+    uint delay;
+    QString path;
+    ExportTask tasks;
+    QRect pinWindowGeometry, initialSelection;
+
+    qd >> vF0
+        >> mode >> delay >> path >> tasks
+        >> pinWindowGeometry >> initialSelection >> vF9;
+    if (vF0 != "F0" || vF9 != "F9")
+        return false;
+    m_mode = mode;
+    m_delay = delay;
+    m_path = path;
+    m_tasks = tasks;
+    m_pinWindowGeometry = pinWindowGeometry;
+    m_initialSelection = initialSelection;
+    return true;
+}
