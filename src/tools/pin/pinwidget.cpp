@@ -17,6 +17,7 @@
 #include <QVBoxLayout>
 #include <QWheelEvent>
 #include <flameshot.h>
+#include <flameshotdaemon.h>
 
 namespace {
 constexpr int MARGIN = 7;
@@ -302,6 +303,14 @@ void PinWidget::showContextMenu(const QPoint& pos)
     connect(
       &saveToFileAction, &QAction::triggered, this, &PinWidget::saveToFile);
     contextMenu.addAction(&saveToFileAction);
+
+    QAction cloneAction(tr("Clo&ne"), this);
+    connect(&cloneAction,
+        &QAction::triggered,
+        this,
+        [=]() { FlameshotDaemon::instance()->
+            attachPin( m_pixmap, geometry() - layout()->contentsMargins()); });
+    contextMenu.addAction(&cloneAction);
 
     QAction editAction(tr("&Edit"), this);
     connect(

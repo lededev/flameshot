@@ -34,7 +34,6 @@ private:
     bool gestureEvent(QGestureEvent* event);
     bool scrollEvent(QWheelEvent* e);
     void pinchTriggered(QPinchGesture*);
-    void showContextMenu(const QPoint& pos);
     void closePin();
 
     void rotateLeft();
@@ -59,5 +58,6 @@ private:
     bool m_sizeChanged{ false };
 
 private slots:
+    void showContextMenu(const QPoint& pos);
     void saveToFile();
 };

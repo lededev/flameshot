@@ -29,6 +29,7 @@ public:
                                 const QString& notification = "");
     static bool isThisInstanceHostingWidgets();
     TrayIcon* getTrayIcon() { return m_trayIcon; };
+    void attachPin(const QPixmap& pixmap, QRect geometry);
 
     void sendTrayNotification(
       const QString& text,
@@ -52,7 +53,6 @@ signals:
 private:
     FlameshotDaemon();
     void quitIfIdle();
-    void attachPin(const QPixmap& pixmap, QRect geometry);
     void attachScreenshotToClipboard(const QPixmap& pixmap);
 
     void attachPin(const QByteArray& data);

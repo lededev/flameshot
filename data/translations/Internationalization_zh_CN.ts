@@ -1870,7 +1870,12 @@ Please solve them manually in the configuration file.</source>
         <translation>存盘(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="306"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="307"/>
+        <source>Clo&amp;ne</source>
+        <translation>克隆(&amp;N)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="314"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
