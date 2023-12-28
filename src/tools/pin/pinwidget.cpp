@@ -34,6 +34,7 @@ PinWidget::PinWidget(const QPixmap& pixmap,
   , m_layout(new QVBoxLayout(this))
   , m_label(new QLabel())
   , m_shadowEffect(new QGraphicsDropShadowEffect(this))
+  , m_notifierBox(new NotifierBox())
 {
     setWindowIcon(QIcon(GlobalValues::iconPath()));
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -55,6 +56,8 @@ PinWidget::PinWidget(const QPixmap& pixmap,
 
     m_label->setPixmap(m_pixmap);
     m_layout->addWidget(m_label);
+
+    m_notifierBox->hide();
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     new QShortcut(Qt::Key_Escape, this, SLOT(close()));
@@ -98,6 +101,11 @@ PinWidget::PinWidget(const QPixmap& pixmap,
             &PinWidget::showContextMenu);
 }
 
+PinWidget::~PinWidget()
+{
+    m_notifierBox->close();
+}
+
 void PinWidget::closePin()
 {
     update();
@@ -134,6 +142,7 @@ bool PinWidget::scrollEvent(QWheelEvent* event)
 
     m_sizeChanged = true;
     update();
+    showFlatText(QString("%1").arg(static_cast<long>(m_currentStepScaleFactor * 100)));
     return true;
 }
 
@@ -224,7 +233,9 @@ void PinWidget::increaseOpacity()
     if (m_opacity > 1.0) {
         m_opacity = 1.0;
     }
+
     setWindowOpacity(m_opacity);
+    showFlatText(QString("%1").arg(static_cast<long>(m_opacity * 10)));
 }
 
 void PinWidget::decreaseOpacity()
@@ -235,6 +246,16 @@ void PinWidget::decreaseOpacity()
     }
 
     setWindowOpacity(m_opacity);
+    showFlatText(QString("%1").arg(static_cast<long>(m_opacity * 10)));
+}
+
+void PinWidget::showFlatText(const QString& text)
+{
+    auto screenRect = QGuiAppCurrentScreen().currentScreen()->geometry();
+    int x = screenRect.left() + (screenRect.width() - m_notifierBox->width()) / 2;
+    int y = screenRect.top() + m_notifierBox->width() / 2;
+    m_notifierBox->move(x, y);
+    m_notifierBox->showMessage(text);
 }
 
 bool PinWidget::event(QEvent* event)
@@ -309,7 +330,7 @@ void PinWidget::showContextMenu(const QPoint& pos)
         &QAction::triggered,
         this,
         [=]() { FlameshotDaemon::instance()->
-            attachPin( m_pixmap, geometry() - layout()->contentsMargins()); });
+            attachPin(m_pixmap, geometry() - layout()->contentsMargins()); });
     contextMenu.addAction(&cloneAction);
 
     QAction editAction(tr("&Edit"), this);

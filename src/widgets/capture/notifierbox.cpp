@@ -12,6 +12,10 @@
 NotifierBox::NotifierBox(QWidget* parent)
   : QWidget(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setStyleSheet("background:transparent;");
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     m_timer->setInterval(600);
