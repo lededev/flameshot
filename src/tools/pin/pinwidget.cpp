@@ -22,7 +22,9 @@
 namespace {
 constexpr int MARGIN = 7;
 constexpr int BLUR_RADIUS = 2 * MARGIN;
-constexpr qreal STEP = 0.03;
+constexpr qreal SCALING_STEP = 0.03;
+constexpr qreal OPACITY_WHEEL_STEP = 0.02;
+constexpr qreal OPACITY_STEP = 0.1;
 constexpr qreal MIN_SIZE = 100.0;
 }
 
@@ -111,22 +113,54 @@ void PinWidget::closePin()
     update();
     close();
 }
-bool PinWidget::scrollEvent(QWheelEvent* event)
+bool PinWidget::scrollEvent(QWheelEvent* e)
 {
-    const auto phase = event->phase();
+    if (e->modifiers() & Qt::ControlModifier) {
+        int scrollDirection = 0;
+        if (e->angleDelta().y() >= 60) {
+            // mouse scroll (wheel) increment
+            scrollDirection = 1;
+        } else if (e->angleDelta().y() <= -60) {
+            // mouse scroll (wheel) decrement
+            scrollDirection = -1;
+        } else {
+            // touchpad scroll
+            qint64 current = QDateTime::currentMSecsSinceEpoch();
+            if ((current - m_lastMouseWheel) > 200) {
+                if (e->angleDelta().y() > 0) {
+                    scrollDirection = 1;
+                } else if (e->angleDelta().y() < 0) {
+                    scrollDirection = -1;
+                }
+                m_lastMouseWheel = current;
+            } else {
+                return true;
+            }
+        }
+        switch (scrollDirection) {
+        case 1:
+            changeOpacity(OPACITY_WHEEL_STEP);
+            break;
+        case -1:
+            changeOpacity(-OPACITY_WHEEL_STEP);
+            break;
+        }
+        return true;
+    }
+    const auto phase = e->phase();
     if (phase == Qt::ScrollPhase::ScrollUpdate
 #if defined(Q_OS_LINUX) || defined(Q_OS_WINDOWS)
         // Linux is getting only NoScrollPhase events.
         || phase == Qt::ScrollPhase::NoScrollPhase
 #endif
     ) {
-        const auto angle = event->angleDelta();
+        const auto angle = e->angleDelta();
         if (angle.y() == 0) {
             return true;
         }
         m_currentStepScaleFactor = angle.y() > 0
-                                     ? m_currentStepScaleFactor + STEP
-                                     : m_currentStepScaleFactor - STEP;
+            ? m_currentStepScaleFactor + SCALING_STEP
+            : m_currentStepScaleFactor - SCALING_STEP;
         m_expanding = m_currentStepScaleFactor >= 1.0;
     }
 #if defined(Q_OS_MACOS)
@@ -142,7 +176,7 @@ bool PinWidget::scrollEvent(QWheelEvent* event)
 
     m_sizeChanged = true;
     update();
-    showFlatText(QString("%1").arg(static_cast<long>(m_currentStepScaleFactor * 100)));
+    showFloatingText(QString("%1").arg(static_cast<long>(m_currentStepScaleFactor * 100)));
     return true;
 }
 
@@ -227,29 +261,20 @@ void PinWidget::rotateRight()
     m_pixmap = m_pixmap.transformed(rotateTransform);
 }
 
-void PinWidget::increaseOpacity()
+void PinWidget::changeOpacity(qreal step)
 {
-    m_opacity += 0.1;
-    if (m_opacity > 1.0) {
+    m_opacity += step;
+    if (m_opacity < 0.0) {
+        m_opacity = 0.0;
+    } else if (m_opacity > 1.0) {
         m_opacity = 1.0;
     }
 
     setWindowOpacity(m_opacity);
-    showFlatText(QString("%1").arg(static_cast<long>(m_opacity * 10)));
+    showFloatingText(QString("%1").arg(static_cast<long>(m_opacity * 100)));
 }
 
-void PinWidget::decreaseOpacity()
-{
-    m_opacity -= 0.1;
-    if (m_opacity < 0.0) {
-        m_opacity = 0.0;
-    }
-
-    setWindowOpacity(m_opacity);
-    showFlatText(QString("%1").arg(static_cast<long>(m_opacity * 10)));
-}
-
-void PinWidget::showFlatText(const QString& text)
+void PinWidget::showFloatingText(const QString& text)
 {
     auto screenRect = QGuiAppCurrentScreen().currentScreen()->geometry();
     int x = screenRect.left() + (screenRect.width() - m_notifierBox->width()) / 2;
@@ -362,14 +387,14 @@ void PinWidget::showContextMenu(const QPoint& pos)
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
-            &PinWidget::increaseOpacity);
+            [=]() { changeOpacity(OPACITY_STEP); });
     contextMenu.addAction(&increaseOpacityAction);
 
     QAction decreaseOpacityAction(tr("&Decrease Opacity"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
-            &PinWidget::decreaseOpacity);
+            [=]() { changeOpacity(-OPACITY_STEP); });
     contextMenu.addAction(&decreaseOpacityAction);
 
     QAction hideShadowAction(tr("&Hide Shadow"), this);

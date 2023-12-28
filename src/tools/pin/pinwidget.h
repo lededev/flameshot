@@ -42,9 +42,8 @@ private:
     void rotateLeft();
     void rotateRight();
 
-    void increaseOpacity();
-    void decreaseOpacity();
-    void showFlatText(const QString& text);
+    void changeOpacity(qreal step);
+    void showFloatingText(const QString& text);
 
     QPixmap m_pixmap;
     QVBoxLayout* m_layout;
@@ -61,6 +60,7 @@ private:
     unsigned int m_rotateFactor{ 0 };
     qreal m_currentStepScaleFactor{ 1 };
     bool m_sizeChanged{ false };
+    qint64 m_lastMouseWheel { 0 };
 
 private slots:
     void showContextMenu(const QPoint& pos);
