@@ -9,6 +9,7 @@
 #include <QPainterPath>
 #include <QPen>
 #include <QPixmap>
+#include <colorutils.h>
 
 MagnifierWidget::MagnifierWidget(const QPixmap& p,
                                  const QColor& c,
@@ -32,6 +33,12 @@ MagnifierWidget::MagnifierWidget(const QPixmap& p,
     painter.drawPixmap(m_magPixels, m_magPixels, p);
     m_paddedScreenshot.convertFromImage(padded);
 }
+
+QRgb MagnifierWidget::getRgb() const
+{
+    return m_rgb;
+}
+
 void MagnifierWidget::paintEvent(QPaintEvent*)
 {
     QPainter p(this);
@@ -40,6 +47,7 @@ void MagnifierWidget::paintEvent(QPaintEvent*)
     } else {
         drawMagnifierCircle(p);
     }
+    drawRgbShowBox(p);
 }
 
 void MagnifierWidget::drawMagnifierCircle(QPainter& painter)
@@ -103,6 +111,7 @@ void MagnifierWidget::drawMagnifierCircle(QPainter& painter)
     painter.drawEllipse(
       drawPos, m_pixels * magZoom / 2, m_pixels * magZoom / 2);
 }
+
 // https://invent.kde.org/graphics/spectacle/-/blob/master/src/QuickEditor/QuickEditor.cpp#L841
 void MagnifierWidget::drawMagnifier(QPainter& painter)
 {
@@ -142,8 +151,8 @@ void MagnifierWidget::drawMagnifier(QPainter& painter)
         drawPosX = x - m_magOffset - m_pixels * magZoom / 2;
     }
     qreal drawPosY = y + m_magOffset + m_pixels * magZoom / 2;
-    if (drawPosY > height() - m_pixels * magZoom / 2) {
-        drawPosY = y - m_magOffset - m_pixels * magZoom / 2;
+    if (drawPosY > height() - m_pixels * magZoom / 2 - m_RgbBoxHeight) {
+        drawPosY = y - m_magOffset - m_pixels * magZoom / 2 - m_RgbBoxHeight;
     }
     QPointF drawPos(drawPosX, drawPosY);
     QRectF crossHairTop(drawPos.x() + magZoom * (offsetX - 0.5),
@@ -165,15 +174,34 @@ void MagnifierWidget::drawMagnifier(QPainter& painter)
     QRectF crossHairBorder(drawPos.x() - magZoom * (m_magPixels + 0.5) - 1,
                            drawPos.y() - magZoom * (m_magPixels + 0.5) - 1,
                            m_pixels * magZoom + 2,
-                           m_pixels * magZoom + 2);
+                           m_pixels * magZoom + 2 + m_RgbBoxHeight);
     const auto frag =
       QPainter::PixmapFragment::create(drawPos, magniRect, magZoom, magZoom);
 
     painter.fillRect(crossHairBorder, m_borderColor);
+    const auto textColor =
+      (ColorUtils::colorIsDark(m_borderColor) ? Qt::white : Qt::black);
+    painter.setPen(textColor);
+    QPointF posLine1 {crossHairBorder.x() + 8, crossHairBorder.bottom() - 36};
+    QPointF posLine2 {crossHairBorder.x() + 8, crossHairBorder.bottom() - 10};
+    QPixmap pixel = m_screenshot.copy(QRect(translated, translated));
+    m_rgb = pixel.toImage().pixel(0, 0);
+    QString rgbTxt = QString("RGB %1 %2 %3")
+        .arg(qRed(m_rgb), 2, 16, QLatin1Char('0'))
+        .arg(qGreen(m_rgb), 2, 16, QLatin1Char('0'))
+        .arg(qBlue(m_rgb), 2, 16, QLatin1Char('0'));
+    QString posTxt = QString("X,Y %1 %2").arg(x).arg(y);
+    painter.drawText(posLine1, posTxt);
+    painter.drawText(posLine2, rgbTxt);
     painter.drawPixmapFragments(&frag, 1, m_screenshot, QPainter::OpaqueHint);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     for (const auto& rect :
          { crossHairTop, crossHairRight, crossHairBottom, crossHairLeft }) {
         painter.fillRect(rect, m_color);
     }
+}
+
+void MagnifierWidget::drawRgbShowBox(QPainter& painter)
+{
+
 }
