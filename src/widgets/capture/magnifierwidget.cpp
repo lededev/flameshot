@@ -47,7 +47,6 @@ void MagnifierWidget::paintEvent(QPaintEvent*)
     } else {
         drawMagnifierCircle(p);
     }
-    drawRgbShowBox(p);
 }
 
 void MagnifierWidget::drawMagnifierCircle(QPainter& painter)
@@ -199,9 +198,4 @@ void MagnifierWidget::drawMagnifier(QPainter& painter)
          { crossHairTop, crossHairRight, crossHairBottom, crossHairLeft }) {
         painter.fillRect(rect, m_color);
     }
-}
-
-void MagnifierWidget::drawRgbShowBox(QPainter& painter)
-{
-
 }

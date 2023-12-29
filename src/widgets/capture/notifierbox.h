@@ -34,4 +34,5 @@ private:
 
     void hideEvent(QHideEvent* event) override;
     void findMaxFontSize();
+    void setGeometryByMessage(const QString& msg, const QPoint& pos);
 };

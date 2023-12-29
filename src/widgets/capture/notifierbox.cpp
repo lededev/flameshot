@@ -78,34 +78,7 @@ void NotifierBox::showMessage(const QString& msg, QPoint pos)
     m_message = msg;
     if (m_isTopWnd) {
         findMaxFontSize();
-        const auto currentScreen = QGuiAppCurrentScreen().currentScreen();
-        const auto screenRect = currentScreen->geometry();
-        const qreal devicePixelRatio = currentScreen->devicePixelRatio();
-        QPainter painter(this);
-        QFont newFont = painter.font();
-        newFont.setPointSize(m_fontSize);
-        QFontMetrics fm(newFont);
-        auto fmWidth = fm.horizontalAdvance(msg);
-        auto newSize = m_fontSize;
-        const auto maxWidth = std::min(screenRect.width(), 5120);
-        while (fmWidth > maxWidth) {
-            newSize--;
-            QFont newFont = painter.font();
-            newFont.setPointSize(newSize);
-            QFontMetrics fm(newFont);
-            fmWidth = fm.horizontalAdvance(msg);
-        }
-        if (newSize != m_fontSize) {
-            m_fontSize = newSize > 1 ? newSize - 1 : newSize;
-        }
-        if (pos.isNull())
-        {
-            int x = screenRect.left() + (screenRect.width() - fmWidth) / 2;
-            int y = screenRect.top() + geometry().height();
-            setGeometry(x, y, fmWidth, geometry().height());
-        }
-        else
-            setGeometry(pos.x(), pos.y(), fmWidth, geometry().height());
+        setGeometryByMessage(msg, pos);
     } else if (!pos.isNull()){
         move(pos);
     }
@@ -142,4 +115,36 @@ void NotifierBox::findMaxFontSize()
         fm = QFontMetrics(newFont);
     }
     m_fontSize = fontSize > 1? fontSize - 1: fontSize;
+}
+
+void NotifierBox::setGeometryByMessage(const QString& msg, const QPoint& pos)
+{
+    const auto currentScreen = QGuiAppCurrentScreen().currentScreen();
+    const auto screenRect = currentScreen->geometry();
+    const qreal devicePixelRatio = currentScreen->devicePixelRatio();
+    QPainter painter(this);
+    QFont newFont = painter.font();
+    newFont.setPointSize(m_fontSize);
+    QFontMetrics fm(newFont);
+    auto fmWidth = fm.horizontalAdvance(msg);
+    auto newSize = m_fontSize;
+    const auto maxWidth = std::min(screenRect.width(), 5120);
+    while (fmWidth > maxWidth) {
+        newSize--;
+        QFont newFont = painter.font();
+        newFont.setPointSize(newSize);
+        QFontMetrics fm(newFont);
+        fmWidth = fm.horizontalAdvance(msg);
+    }
+    if (newSize != m_fontSize) {
+        m_fontSize = newSize > 1 ? newSize - 1 : newSize;
+    }
+    if (pos.isNull())
+    {
+        int x = screenRect.left() + (screenRect.width() - fmWidth) / 2;
+        int y = screenRect.top() + geometry().height();
+        setGeometry(x, y, fmWidth, geometry().height());
+    }
+    else
+        setGeometry(pos.x(), pos.y(), fmWidth, geometry().height());
 }

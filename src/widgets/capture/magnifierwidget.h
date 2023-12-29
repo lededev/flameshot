@@ -32,5 +32,4 @@ private:
     QRgb m_rgb;
     void drawMagnifier(QPainter& painter);
     void drawMagnifierCircle(QPainter& painter);
-    void drawRgbShowBox(QPainter& painter);
 };
