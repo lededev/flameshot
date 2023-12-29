@@ -10,6 +10,7 @@ class QDBusMessage;
 class QDBusConnection;
 class TrayIcon;
 class CaptureWidget;
+class NotifierBox;
 
 #if !defined(DISABLE_UPDATE_CHECKER)
 class QNetworkAccessManager;
@@ -28,8 +29,10 @@ public:
     static void copyToClipboard(const QString& text,
                                 const QString& notification = "");
     static bool isThisInstanceHostingWidgets();
+
     TrayIcon* getTrayIcon() { return m_trayIcon; };
     void attachPin(const QPixmap& pixmap, QRect geometry);
+    void showFloatingText(const QString& text, QPoint pos = QPoint());
 
     void sendTrayNotification(
       const QString& text,
@@ -73,6 +76,7 @@ private:
     bool m_clipboardSignalBlocked;
     QList<QWidget*> m_widgets;
     TrayIcon* m_trayIcon;
+    NotifierBox* m_notifierBox;
 
 #if !defined(DISABLE_UPDATE_CHECKER)
     QString m_appLatestUrl;

@@ -21,7 +21,7 @@ signals:
     void hidden();
 
 public slots:
-    void showMessage(const QString& msg);
+    void showMessage(const QString& msg, QPoint pos = QPoint());
     void showColor(const QColor& color);
 
 private:
@@ -29,6 +29,9 @@ private:
     QString m_message;
     QColor m_bgColor;
     QColor m_foregroundColor;
+    bool m_isTopWnd;
+    int m_fontSize = 0;
 
     void hideEvent(QHideEvent* event) override;
+    void findMaxFontSize();
 };

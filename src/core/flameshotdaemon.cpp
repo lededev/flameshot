@@ -7,6 +7,7 @@
 #include "screenshotsaver.h"
 #include "src/utils/globalvalues.h"
 #include "src/widgets/capture/capturewidget.h"
+#include "src/widgets/capture/notifierbox.h"
 #include "src/widgets/trayicon.h"
 #include <QApplication>
 #include <QClipboard>
@@ -60,6 +61,7 @@ FlameshotDaemon::FlameshotDaemon()
   , m_hostingClipboard(false)
   , m_clipboardSignalBlocked(false)
   , m_trayIcon(nullptr)
+  , m_notifierBox(nullptr)
 #if !defined(DISABLE_UPDATE_CHECKER)
   , m_networkCheckUpdates(nullptr)
   , m_showCheckAppUpdateStatus(false)
@@ -102,6 +104,8 @@ void FlameshotDaemon::start()
         m_instance = new FlameshotDaemon();
         // Tray icon needs FlameshotDaemon::instance() to be non-null
         m_instance->initTrayIcon();
+        m_instance->m_notifierBox = new NotifierBox();
+        m_instance->m_notifierBox->hide();
         qApp->setQuitOnLastWindowClosed(false);
     }
 }
@@ -162,6 +166,11 @@ void FlameshotDaemon::copyToClipboard(const QString& text,
 bool FlameshotDaemon::isThisInstanceHostingWidgets()
 {
     return instance() && !instance()->m_widgets.isEmpty();
+}
+
+void FlameshotDaemon::showFloatingText(const QString& text, QPoint pos)
+{
+    m_notifierBox->showMessage(text, pos);
 }
 
 void FlameshotDaemon::sendTrayNotification(const QString& text,
@@ -309,7 +318,11 @@ void FlameshotDaemon::attachTextToClipboard(const QString& text,
 {
     // Must send notification before clipboard modification on linux
     if (!notification.isEmpty()) {
+#ifdef Q_OS_WIN
+        showFloatingText(notification);
+#else
         AbstractLogger::info() << notification;
+#endif
     }
 
     m_hostingClipboard = true;

@@ -214,7 +214,22 @@
         <translation>无法捕获屏幕</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="382"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="420"/>
+        <source>Copy RGB Hex %1</source>
+        <translation>复制十六进制RGB %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="428"/>
+        <source>Copy RGB %1</source>
+        <translation>复制RGB %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="436"/>
+        <source>Set Current RGB color value to color picker</source>
+        <translation type="unfinished">设置光标处RGB颜色值到画笔</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="452"/>
         <source>Mouse</source>
         <translation>鼠标</translation>
     </message>
@@ -1855,7 +1870,12 @@ Please solve them manually in the configuration file.</source>
 <context>
     <name>PinWidget</name>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="225"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="171"/>
+        <source>Zoom %1%</source>
+        <translation>缩放 %1%</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="323"/>
         <source>Context menu</source>
         <translation>上下文菜单</translation>
     </message>

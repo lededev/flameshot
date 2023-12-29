@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "src/widgets/capture/notifierbox.h"
-
 #include <QWidget>
 
 class QLabel;
@@ -20,7 +18,6 @@ public:
     explicit PinWidget(const QPixmap& pixmap,
                        const QRect& geometry,
                        QWidget* parent = nullptr);
-    ~PinWidget();
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent*) override;
@@ -43,7 +40,6 @@ private:
     void rotateRight();
 
     void changeOpacity(qreal step);
-    void showFloatingText(const QString& text);
 
     QPixmap m_pixmap;
     QVBoxLayout* m_layout;
@@ -52,7 +48,6 @@ private:
     qreal m_offsetX{}, m_offsetY{};
     QGraphicsDropShadowEffect* m_shadowEffect;
     QColor m_baseColor, m_hoverColor;
-    NotifierBox* m_notifierBox;
 
     bool m_expanding{ false };
     qreal m_scaleFactor{ 1 };

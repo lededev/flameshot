@@ -417,8 +417,7 @@ void CaptureWidget::copyRgbHex()
         .arg(qRed(rgb), 2, 16, QLatin1Char('0'))
         .arg(qGreen(rgb), 2, 16, QLatin1Char('0'))
         .arg(qBlue(rgb), 2, 16, QLatin1Char('0'));
-    FlameshotDaemon::copyToClipboard(rgbHexStr, rgbHexStr);
-    // TODO make showFloatingText to public function and bigger font size and adaptive width
+    FlameshotDaemon::copyToClipboard(rgbHexStr, tr("Copy RGB Hex %1").arg(rgbHexStr));
 }
 
 void CaptureWidget::copyRgb()
@@ -426,14 +425,15 @@ void CaptureWidget::copyRgb()
     auto rgb = m_magnifier->getRgb();
     const auto rgbStr = QString("(%1, %2, %3)")
         .arg(qRed(rgb)).arg(qGreen(rgb)).arg(qBlue(rgb));
-    FlameshotDaemon::copyToClipboard(rgbStr, rgbStr);
-
+    FlameshotDaemon::copyToClipboard(rgbStr, tr("Copy RGB %1").arg(rgbStr));
 }
 
 void CaptureWidget::setRgb()
 {
     auto rgb = m_magnifier->getRgb();
     setDrawColor(rgb);
+    FlameshotDaemon::instance()->showFloatingText(
+        tr("Set Current RGB color value to color picker"));
 }
 
 void CaptureWidget::showxywh()

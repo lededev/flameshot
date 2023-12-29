@@ -5,7 +5,6 @@
 #include <QPinchGesture>
 
 #include "pinwidget.h"
-#include "qguiappcurrentscreen.h"
 #include "screenshotsaver.h"
 #include "src/utils/confighandler.h"
 #include "src/utils/globalvalues.h"
@@ -22,7 +21,7 @@
 namespace {
 constexpr int MARGIN = 7;
 constexpr int BLUR_RADIUS = 2 * MARGIN;
-constexpr qreal SCALING_STEP = 0.03;
+constexpr qreal SCALING_STEP = 0.025;
 constexpr qreal OPACITY_WHEEL_STEP = 0.02;
 constexpr qreal OPACITY_STEP = 0.1;
 constexpr qreal MIN_SIZE = 100.0;
@@ -36,7 +35,6 @@ PinWidget::PinWidget(const QPixmap& pixmap,
   , m_layout(new QVBoxLayout(this))
   , m_label(new QLabel())
   , m_shadowEffect(new QGraphicsDropShadowEffect(this))
-  , m_notifierBox(new NotifierBox())
 {
     setWindowIcon(QIcon(GlobalValues::iconPath()));
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
@@ -58,8 +56,6 @@ PinWidget::PinWidget(const QPixmap& pixmap,
 
     m_label->setPixmap(m_pixmap);
     m_layout->addWidget(m_label);
-
-    m_notifierBox->hide();
 
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     new QShortcut(Qt::Key_Escape, this, SLOT(close()));
@@ -101,11 +97,6 @@ PinWidget::PinWidget(const QPixmap& pixmap,
             &QWidget::customContextMenuRequested,
             this,
             &PinWidget::showContextMenu);
-}
-
-PinWidget::~PinWidget()
-{
-    m_notifierBox->close();
 }
 
 void PinWidget::closePin()
@@ -176,7 +167,8 @@ bool PinWidget::scrollEvent(QWheelEvent* e)
 
     m_sizeChanged = true;
     update();
-    showFloatingText(QString("%1").arg(static_cast<long>(m_currentStepScaleFactor * 100)));
+    FlameshotDaemon::instance()->showFloatingText(
+        tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
     return true;
 }
 
@@ -271,16 +263,8 @@ void PinWidget::changeOpacity(qreal step)
     }
 
     setWindowOpacity(m_opacity);
-    showFloatingText(QString("%1").arg(static_cast<long>(m_opacity * 100)));
-}
-
-void PinWidget::showFloatingText(const QString& text)
-{
-    auto screenRect = QGuiAppCurrentScreen().currentScreen()->geometry();
-    int x = screenRect.left() + (screenRect.width() - m_notifierBox->width()) / 2;
-    int y = screenRect.top() + m_notifierBox->width() / 2;
-    m_notifierBox->move(x, y);
-    m_notifierBox->showMessage(text);
+    FlameshotDaemon::instance()->showFloatingText(
+        QString("%1").arg(static_cast<long>(m_opacity * 100)));
 }
 
 bool PinWidget::event(QEvent* event)
