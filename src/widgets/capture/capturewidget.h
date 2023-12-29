@@ -98,6 +98,9 @@ private slots:
     void xywhTick();
     void onDisplayGridChanged(bool display);
     void onGridSizeChanged(int size);
+    void copyRgbHex();
+    void copyRgb();
+    void setRgb();
 #if defined(Q_OS_WIN)
     void selectWinUp();
     void selectWinDown();

@@ -16,6 +16,7 @@
 #include "src/config/cacheutils.h"
 #include "src/config/generalconf.h"
 #include "src/core/flameshot.h"
+#include "src/core/flameshotdaemon.h"
 #include "src/core/qguiappcurrentscreen.h"
 #include "src/tools/toolfactory.h"
 #include "src/utils/colorutils.h"
@@ -407,6 +408,32 @@ void CaptureWidget::onGridSizeChanged(int size)
 {
     m_gridSize = size;
     repaint();
+}
+
+void CaptureWidget::copyRgbHex()
+{
+    auto rgb = m_magnifier->getRgb();
+    QString rgbHexStr = QString("#%1%2%3")
+        .arg(qRed(rgb), 2, 16, QLatin1Char('0'))
+        .arg(qGreen(rgb), 2, 16, QLatin1Char('0'))
+        .arg(qBlue(rgb), 2, 16, QLatin1Char('0'));
+    FlameshotDaemon::copyToClipboard(rgbHexStr, rgbHexStr);
+    // TODO make showFloatingText to public function and bigger font size and adaptive width
+}
+
+void CaptureWidget::copyRgb()
+{
+    auto rgb = m_magnifier->getRgb();
+    const auto rgbStr = QString("(%1, %2, %3)")
+        .arg(qRed(rgb)).arg(qGreen(rgb)).arg(qBlue(rgb));
+    FlameshotDaemon::copyToClipboard(rgbStr, rgbStr);
+
+}
+
+void CaptureWidget::setRgb()
+{
+    auto rgb = m_magnifier->getRgb();
+    setDrawColor(rgb);
 }
 
 void CaptureWidget::showxywh()
@@ -1618,6 +1645,18 @@ void CaptureWidget::initShortcuts()
                 this,
                 SLOT(selectWinDown()));
 #endif
+
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_COPY_RGB_HEX")),
+                this,
+                SLOT(copyRgbHex()));
+
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_COPY_RGB")),
+                this,
+                SLOT(copyRgb()));
+
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_SET_RGB")),
+                this,
+                SLOT(setRgb()));
 
     newShortcut(Qt::Key_Escape, this, SLOT(deleteToolWidgetOrClose()));
 }

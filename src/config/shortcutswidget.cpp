@@ -202,6 +202,10 @@ void ShortcutsWidget::loadShortcuts()
     appendShortcut("TYPE_SELECT_WIN_UP", tr("Select Window small to big"));
     appendShortcut("TYPE_SELECT_WIN_DOWN", tr("Select Window app to small"));
 #endif
+    appendShortcut("TYPE_COPY_RGB_HEX", tr("Copy current RGB color Hex value"));
+    appendShortcut("TYPE_COPY_RGB", tr("Copy current RGB color value"));
+    appendShortcut("TYPE_SET_RGB", tr("Set Current RGB color value to color picker"));
+
     // non-editable shortcuts have an empty shortcut name
 
     m_shortcuts << (QStringList() << "" << QObject::tr("Select Window small to big")

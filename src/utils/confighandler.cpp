@@ -183,6 +183,10 @@ static QMap<QString, QSharedPointer<KeySequence>> recognizedShortcuts = {
     SHORTCUT("TYPE_SELECT_WIN_UP"       ,   "Shift+S"               ),
     SHORTCUT("TYPE_SELECT_WIN_DOWN"     ,   "Shift+D"               ),
 #endif
+    SHORTCUT("TYPE_COPY_RGB_HEX"        ,   "Ctrl+R"                ),
+    SHORTCUT("TYPE_COPY_RGB"            ,   "Shift+R"               ),
+    SHORTCUT("TYPE_SET_RGB"             ,   "Shift+C"               ),
+
 };
 // clang-format on
 

@@ -2611,7 +2611,22 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>窗口框选：从主窗到小</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="208"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="205"/>
+        <source>Copy current RGB color Hex value</source>
+        <translation>复制光标处RGB十六进制颜色值</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="206"/>
+        <source>Copy current RGB color value</source>
+        <translation>复制光标处RGB颜色值</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="207"/>
+        <source>Set Current RGB color value to color picker</source>
+        <translation>设置光标处RGB颜色值到画笔</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="212"/>
         <source>Mouse Wheel Up</source>
         <translation>鼠标滚轮向上</translation>
     </message>
