@@ -137,7 +137,10 @@ set(FLAMESHOT_TS_FILES
 if (GENERATE_TS)
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${FLAMESHOT_TS_FILES})
 else ()
+    set(ts_qrc "translations.qrc")
+    configure_file(${ts_qrc} ${ts_qrc} COPYONLY)
     qt5_add_translation(QM_FILES ${FLAMESHOT_TS_FILES})
+    qt5_add_resources(QM_RC ${CMAKE_CURRENT_BINARY_DIR}/${ts_qrc})
 endif ()
 
 target_sources(
@@ -147,6 +150,7 @@ target_sources(
         # ${CMAKE_CURRENT_SOURCE_DIR}/../external/Qt-Color-Widgets/src/QtColorWidgets/color_wheel.cpp
         # ${CMAKE_CURRENT_SOURCE_DIR}/../external/Qt-Color-Widgets/include/QtColorWidgets/color_wheel.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/../data/graphics.qrc
+        ${QM_RC}
         ${CMAKE_CURRENT_SOURCE_DIR}/../data/flameshot.rc # windows binary icon resource file
         ${QM_FILES}
         main.cpp)
@@ -204,6 +208,8 @@ else ()
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../external/singleapplication>)
 endif()
+
+qt5_import_plugins(${PROJECT_NAME} INCLUDE Qt5::QSvgPlugin)
 
 target_link_libraries(
         flameshot

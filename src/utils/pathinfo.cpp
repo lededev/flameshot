@@ -27,5 +27,7 @@ QStringList PathInfo::translationsPaths()
            << trPath << QStringLiteral("/usr/share/flameshot/translations")
            << QStringLiteral("/usr/local/share/flameshot/translations");
 #endif
-    return QStringList() << trPath;
+    return QStringList()
+           << QString(":/translations")
+           << trPath;
 }

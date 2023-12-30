@@ -33,6 +33,7 @@
 #include <QDBusMessage>
 #include <desktopinfo.h>
 #endif
+#include <qplugin.h>
 
 #ifdef Q_OS_LINUX
 // source: https://github.com/ksnip/ksnip/issues/416
@@ -106,17 +107,19 @@ QSharedMemory* guiMutexLock()
     return shm;
 }
 
-QTranslator translator, qtTranslator;
 
 void configureApp(bool gui)
 {
+    QTranslator* translator {new QTranslator()};
+    QTranslator* qtTranslator {new QTranslator()};
+
     if (gui) {
         QApplication::setStyle(new StyleOverride);
     }
 
     // Configure translations
     for (const QString& path : PathInfo::translationsPaths()) {
-        bool match = translator.load(QLocale(),
+        bool match = translator->load(QLocale(),
                                      QStringLiteral("Internationalization"),
                                      QStringLiteral("_"),
                                      path);
@@ -125,14 +128,14 @@ void configureApp(bool gui)
         }
     }
 
-    qtTranslator.load(QLocale::system(),
+    qtTranslator->load(QLocale::system(),
                       "qt",
                       "_",
                       QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 
     auto app = QCoreApplication::instance();
-    app->installTranslator(&translator);
-    app->installTranslator(&qtTranslator);
+    app->installTranslator(translator);
+    app->installTranslator(qtTranslator);
     app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
 }
 
@@ -157,6 +160,9 @@ int main(int argc, char* argv[])
 #ifdef Q_OS_LINUX
     wayland_hacks();
 #endif
+
+    // static link need this
+    Q_IMPORT_PLUGIN(QSvgPlugin);
 
     // required for the button serialization
     // TODO: change to QVector in v1.0
