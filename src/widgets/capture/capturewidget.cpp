@@ -299,13 +299,21 @@ void CaptureWidget::initButtons()
         visibleButtonTypes.removeOne(CaptureTool::TYPE_ACCEPT);
     } else {
         // Remove irrelevant buttons from both lists
-        for (auto* buttonList : { &allButtonTypes, &visibleButtonTypes }) {
-            buttonList->removeOne(CaptureTool::TYPE_SAVE);
-            buttonList->removeOne(CaptureTool::TYPE_COPY);
-            buttonList->removeOne(CaptureTool::TYPE_IMAGEUPLOADER);
-            buttonList->removeOne(CaptureTool::TYPE_OPEN_APP);
-            buttonList->removeOne(CaptureTool::TYPE_PIN);
-        }
+        visibleButtonTypes.removeOne(CaptureTool::TYPE_SAVE);
+        visibleButtonTypes.removeOne(CaptureTool::TYPE_COPY);
+        visibleButtonTypes.removeOne(CaptureTool::TYPE_IMAGEUPLOADER);
+        visibleButtonTypes.removeOne(CaptureTool::TYPE_OPEN_APP);
+        visibleButtonTypes.removeOne(CaptureTool::TYPE_PIN);
+
+        if (!(m_context.request.tasks() & CaptureRequest::SAVE))
+            allButtonTypes.removeOne(CaptureTool::TYPE_SAVE);
+        if (!(m_context.request.tasks() & CaptureRequest::COPY))
+            allButtonTypes.removeOne(CaptureTool::TYPE_COPY);
+        if (!(m_context.request.tasks() & CaptureRequest::UPLOAD))
+            allButtonTypes.removeOne(CaptureTool::TYPE_IMAGEUPLOADER);
+        if (!(m_context.request.tasks() & CaptureRequest::PIN))
+            allButtonTypes.removeOne(CaptureTool::TYPE_PIN);
+        allButtonTypes.removeOne(CaptureTool::TYPE_OPEN_APP);
     }
     QVector<CaptureToolButton*> vectorButtons;
 
@@ -1015,7 +1023,9 @@ void CaptureWidget::keyPressEvent(QKeyEvent* e)
         m_adjustmentButtonPressed = true;
         updateCursor();
     } else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
-        if (m_config.enterKeyPin()) {
+        const auto t = m_context.request.tasks();
+        if (m_config.enterKeyPin() &&
+            (t == CaptureRequest::NO_TASK || t & CaptureRequest::PIN)) {
             PinTool pinTool;
             connect(&pinTool,
                     &PinTool::requestAction,
@@ -2154,5 +2164,4 @@ void CaptureWidget::selectWinDown()
 {
     changeCaptureRectSize(true);
 }
-
 #endif
