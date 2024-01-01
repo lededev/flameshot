@@ -238,8 +238,8 @@ int main(int argc, char* argv[])
       QStringLiteral("path"));
     CommandOption clipboardOption(
       { "c", "clipboard" }, QObject::tr("Save the capture to the clipboard"));
-    CommandOption pinOption("pin",
-                            QObject::tr("Pin the capture to the screen"));
+    CommandOption pinOption(
+      { "P", "pin" }, QObject::tr("Pin the capture to the screen"));
     CommandOption uploadOption({ "u", "upload" },
                                QObject::tr("Upload screenshot"));
     CommandOption delayOption({ "d", "delay" },
