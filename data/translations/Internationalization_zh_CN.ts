@@ -224,7 +224,12 @@
         <translation>复制RGB %1</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="436"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="495"/>
+        <source>All information into clipboard Copied</source>
+        <translation>全部信息已复制到剪贴板</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="503"/>
         <source>Set Current RGB color value to color picker</source>
         <translation type="unfinished">设置光标处RGB颜色值到画笔</translation>
     </message>

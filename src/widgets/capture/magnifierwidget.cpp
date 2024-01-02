@@ -116,8 +116,8 @@ void MagnifierWidget::drawMagnifier(QPainter& painter)
 {
     auto relativeCursor = QCursor::pos();
     auto translated = QWidget::mapFromGlobal(relativeCursor);
-    auto x = translated.x();
-    auto y = translated.y();
+    const auto x = translated.x();
+    const auto y = translated.y();
 
     int magX = static_cast<int>(x * m_devicePixelRatio - m_magPixels);
     int offsetX = 0;

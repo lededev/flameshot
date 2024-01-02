@@ -1,0 +1,40 @@
+<RCC>
+    <qresource prefix="/translations">
+        <file>Internationalization_zh_CN.qm</file>
+        <file>Internationalization_bg.qm</file>
+        <file>Internationalization_ca.qm</file>
+        <file>Internationalization_cs.qm</file>
+        <file>Internationalization_de_DE.qm</file>
+        <file>Internationalization_el.qm</file>
+        <file>Internationalization_es.qm</file>
+        <file>Internationalization_eu.qm</file>
+        <file>Internationalization_fa.qm</file>
+        <file>Internationalization_fi.qm</file>
+        <file>Internationalization_fr.qm</file>
+        <file>Internationalization_gl.qm</file>
+        <file>Internationalization_grc.qm</file>
+        <file>Internationalization_he.qm</file>
+        <file>Internationalization_hu.qm</file>
+        <file>Internationalization_id.qm</file>
+        <file>Internationalization_it_IT.qm</file>
+        <file>Internationalization_ja.qm</file>
+        <file>Internationalization_ka.qm</file>
+        <file>Internationalization_ko.qm</file>
+        <file>Internationalization_nb_NO.qm</file>
+        <file>Internationalization_nl.qm</file>
+        <file>Internationalization_nl_NL.qm</file>
+        <file>Internationalization_pl.qm</file>
+        <file>Internationalization_pt_BR.qm</file>
+        <file>Internationalization_ru.qm</file>
+        <file>Internationalization_sk.qm</file>
+        <file>Internationalization_sr_SP.qm</file>
+        <file>Internationalization_sv_SE.qm</file>
+        <file>Internationalization_tr.qm</file>
+        <file>Internationalization_uk.qm</file>
+        <file>Internationalization_vi.qm</file>
+        <file>Internationalization_zh_CN.qm</file>
+        <file>Internationalization_zh_HK.qm</file>
+        <file>Internationalization_zh_TW.qm</file>
+    </qresource>
+</RCC>
+

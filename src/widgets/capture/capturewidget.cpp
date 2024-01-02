@@ -41,6 +41,7 @@
 #include <QPainter>
 #include <QScreen>
 #include <QShortcut>
+#include <QMetaProperty>
 #include <draggablewidgetmaker.h>
 
 #if !defined(DISABLE_UPDATE_CHECKER)
@@ -418,22 +419,80 @@ void CaptureWidget::onGridSizeChanged(int size)
     repaint();
 }
 
-void CaptureWidget::copyRgbHex()
+inline QString formatRgbHex(const QRgb& rgb)
 {
-    auto rgb = m_magnifier->getRgb();
-    QString rgbHexStr = QString("#%1%2%3")
+    return QString("#%1%2%3")
         .arg(qRed(rgb), 2, 16, QLatin1Char('0'))
         .arg(qGreen(rgb), 2, 16, QLatin1Char('0'))
         .arg(qBlue(rgb), 2, 16, QLatin1Char('0'));
+}
+
+inline QString formatRgb(const QRgb& rgb)
+{
+    return QString("(%1, %2, %3)")
+        .arg(qRed(rgb)).arg(qGreen(rgb)).arg(qBlue(rgb));
+}
+
+void CaptureWidget::copyRgbHex()
+{
+    const auto rgb = m_magnifier->getRgb();
+    QString rgbHexStr = formatRgbHex(rgb);
     FlameshotDaemon::copyToClipboard(rgbHexStr, tr("Copy RGB Hex %1").arg(rgbHexStr));
 }
 
 void CaptureWidget::copyRgb()
 {
     auto rgb = m_magnifier->getRgb();
-    const auto rgbStr = QString("(%1, %2, %3)")
-        .arg(qRed(rgb)).arg(qGreen(rgb)).arg(qBlue(rgb));
+    const auto rgbStr = formatRgb(rgb);
     FlameshotDaemon::copyToClipboard(rgbStr, tr("Copy RGB %1").arg(rgbStr));
+}
+
+inline QString printProperties(const QScreen *obj) {
+    QString prop;
+    if (!obj) return prop;
+
+    QTextStream qs(&prop);
+    const auto r = obj->geometry();
+    qs << "geometry: w:" << r.width() << " h:" << r.height() << " x:" << r.x() << " y:" << r.y() << "\n";
+    const QMetaObject *metaObj = obj->metaObject();
+    int propertyCount = metaObj->propertyCount();
+    for (int i = 0; i < propertyCount; ++i) {
+        QMetaProperty metaProperty = metaObj->property(i);
+        if (metaProperty.isReadable()) {
+            const char* name = metaProperty.name();
+            QString value = obj->property(name).toString();
+            if (value.size())
+                qs << name << ": " << value << "\n";
+        }
+    }
+    return prop;
+}
+
+void CaptureWidget::copyAllInfo()
+{
+    QString allInfo;
+    auto translated = mapFromGlobal(QCursor::pos());
+    allInfo += QString("Current x:%1 y:%2\n").arg(translated.x()).arg(translated.y());
+    const auto rgb = m_magnifier->getRgb();
+    allInfo += QString("Current RGB%1 HEX %2\n").arg(formatRgb(rgb)).arg(formatRgbHex(rgb));
+    const auto penRgb = m_context.color.rgb();
+    allInfo += QString("Pen RGB%1 HEX %2\n").arg(formatRgb(penRgb)).arg(formatRgbHex(penRgb));
+    if (m_selection) {
+        const QRect& selection = m_selection->geometry().normalized();
+        const qreal scale = m_context.screenshot.devicePixelRatio();
+        allInfo += QString("Selection w:%1 h:%2 x:%3 y:%4\n")
+            .arg(static_cast<int>(selection.width() * scale))
+            .arg(static_cast<int>(selection.height() * scale))
+            .arg(static_cast<int>(selection.left() * scale))
+            .arg(static_cast<int>(selection.top() * scale));
+    }
+    allInfo += QString("Screenshot offset x:%1 y:%2\n").arg(m_context.widgetOffset.x()).arg(m_context.widgetOffset.y());
+    allInfo += "Screens information:\n";
+    for (QScreen* const screen : QGuiApplication::screens()) {
+        const auto r = screen->geometry();
+        allInfo += printProperties(screen);
+    }
+    FlameshotDaemon::copyToClipboard(allInfo, tr("All information into clipboard Copied"));
 }
 
 void CaptureWidget::setRgb()
@@ -1663,6 +1722,10 @@ void CaptureWidget::initShortcuts()
     newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_COPY_RGB")),
                 this,
                 SLOT(copyRgb()));
+
+    newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_COPY_ALL_INFO")),
+                this,
+                SLOT(copyAllInfo()));
 
     newShortcut(QKeySequence(ConfigHandler().shortcut("TYPE_SET_RGB")),
                 this,

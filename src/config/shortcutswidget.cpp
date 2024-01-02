@@ -204,6 +204,7 @@ void ShortcutsWidget::loadShortcuts()
 #endif
     appendShortcut("TYPE_COPY_RGB_HEX", tr("Copy current RGB color Hex value"));
     appendShortcut("TYPE_COPY_RGB", tr("Copy current RGB color value"));
+    appendShortcut("TYPE_COPY_ALL_INFO", tr("Copy current RGB color value"));
     appendShortcut("TYPE_SET_RGB", tr("Set Current RGB color value to color picker"));
 
     // non-editable shortcuts have an empty shortcut name

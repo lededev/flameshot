@@ -185,6 +185,7 @@ static QMap<QString, QSharedPointer<KeySequence>> recognizedShortcuts = {
 #endif
     SHORTCUT("TYPE_COPY_RGB_HEX"        ,   "Ctrl+R"                ),
     SHORTCUT("TYPE_COPY_RGB"            ,   "Shift+R"               ),
+    SHORTCUT("TYPE_COPY_ALL_INFO"       ,   "Shift+A"               ),
     SHORTCUT("TYPE_SET_RGB"             ,   "Shift+C"               ),
 
 };

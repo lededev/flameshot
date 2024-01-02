@@ -100,6 +100,7 @@ private slots:
     void onGridSizeChanged(int size);
     void copyRgbHex();
     void copyRgb();
+    void copyAllInfo();
     void setRgb();
 #if defined(Q_OS_WIN)
     void selectWinUp();
