@@ -211,10 +211,10 @@ bool saveToFilesystemGUI(const QPixmap& capture)
     }
 
     if (okay) {
-        QString pathNoFile =
-          savePath.left(savePath.lastIndexOf(QDir::separator()));
-
-        ConfigHandler().setSavePath(pathNoFile);
+        if (!config.savePathFixed()) {
+            const auto pathNoFile = QFileInfo(savePath).absolutePath();
+            ConfigHandler().setSavePath(pathNoFile);
+        }
 
         QString msg = QObject::tr("Capture saved as ") + savePath;
         AbstractLogger().attachNotificationPath(savePath) << msg;
