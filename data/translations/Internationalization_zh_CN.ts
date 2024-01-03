@@ -274,7 +274,12 @@
         <translation>右键单击</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/capture/capturewidget.cpp" line="441"/>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="1156"/>
+        <source>Opacity of area outside selection:</source>
+        <translation type="unfinished">选中区域之外的不透明度：</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/capture/capturewidget.cpp" line="537"/>
         <source>Show color picker</source>
         <translation>显示颜色选择器</translation>
     </message>

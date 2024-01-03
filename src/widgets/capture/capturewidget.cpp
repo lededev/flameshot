@@ -1118,32 +1118,45 @@ void CaptureWidget::wheelEvent(QWheelEvent* e)
      * impossible to scroll. It's easier to calculate number of requests and do
      * not accept events faster that one in 200ms.
      * */
-    int toolSizeOffset = 0;
+    int wheelOffset = 0;
     if (e->angleDelta().y() >= 60) {
         // mouse scroll (wheel) increment
-        toolSizeOffset = 1;
+        wheelOffset = 1;
     } else if (e->angleDelta().y() <= -60) {
         // mouse scroll (wheel) decrement
-        toolSizeOffset = -1;
+        wheelOffset = -1;
     } else {
         // touchpad scroll
         qint64 current = QDateTime::currentMSecsSinceEpoch();
         if ((current - m_lastMouseWheel) > 200) {
             if (e->angleDelta().y() > 0) {
-                toolSizeOffset = 1;
+                wheelOffset = 1;
             } else if (e->angleDelta().y() < 0) {
-                toolSizeOffset = -1;
+                wheelOffset = -1;
             }
             m_lastMouseWheel = current;
         } else {
             return;
         }
     }
-    if (e->modifiers() & Qt::ControlModifier) {
-        setToolSize(m_context.toolSize + toolSizeOffset);
+    if (wheelOffset == 0)
+        return;
+    if (e->modifiers() & Qt::ShiftModifier) {
+        setToolSize(m_context.toolSize + wheelOffset);
     }
-    else if (toolSizeOffset != 0 && e->buttons() == Qt::NoButton) {
-        changeCaptureRectSize(toolSizeOffset > 0);
+    else if (e->modifiers() & Qt::ControlModifier) {
+        m_opacity += wheelOffset;
+        if (m_opacity < 0) {
+            m_opacity = 0;
+        } else if (m_opacity > 255) {
+            m_opacity = 255;
+        }
+        repaint();
+        FlameshotDaemon::instance()->showFloatingText(
+            tr("Opacity of area outside selection:") + QString(" %1").arg(m_opacity));
+    }
+    else if (wheelOffset != 0 && e->buttons() == Qt::NoButton) {
+        changeCaptureRectSize(wheelOffset > 0);
     }
 }
 
