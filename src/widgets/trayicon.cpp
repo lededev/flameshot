@@ -55,6 +55,10 @@ TrayIcon::TrayIcon(QObject* parent)
         if (r == Trigger) {
             startGuiCapture();
         }
+        else if (r == Context) {
+            m_unsetMouseTransparentAction->setEnabled(
+                FlameshotDaemon::instance()->countMouseTransparent() > 0);
+        }
     });
 #endif
 
@@ -120,6 +124,13 @@ void TrayIcon::initMenu()
             &QAction::triggered,
             Flameshot::instance(),
             &Flameshot::launcher);
+    m_unsetMouseTransparentAction = new QAction(tr("&Unset Mouse Transparent"), this);
+    connect(m_unsetMouseTransparentAction,
+            &QAction::triggered,
+            FlameshotDaemon::instance(),
+            &FlameshotDaemon::unsetAllMouseTransparent);
+    m_unsetMouseTransparentAction->setEnabled(
+        FlameshotDaemon::instance()->countMouseTransparent() > 0);
     auto* configAction = new QAction(tr("&Configuration"), this);
     connect(configAction,
             &QAction::triggered,
@@ -164,6 +175,7 @@ void TrayIcon::initMenu()
 
     m_menu->addAction(captureAction);
     m_menu->addAction(launcherAction);
+    m_menu->addAction(m_unsetMouseTransparentAction);
     m_menu->addSeparator();
     m_menu->addAction(recentAction);
     m_menu->addAction(openSavePathAction);

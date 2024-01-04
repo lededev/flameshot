@@ -215,6 +215,25 @@ void FlameshotDaemon::getLatestAvailableVersion()
     });
 }
 
+void FlameshotDaemon::unsetAllMouseTransparent()
+{
+    QList<PinWidget*> pins;
+    for (auto& w : m_widgets) {
+        pins.append(static_cast<PinWidget*>(w));
+    }
+    for(auto& w : pins)
+        w->setMouseTransparent(false);
+}
+
+qsizetype FlameshotDaemon::countMouseTransparent()
+{
+    qsizetype c = 0;
+    for (auto& w : m_widgets) {
+        c += static_cast<PinWidget*>(w)->isMouseTransparent()? 1 : 0;
+    }
+    return c;
+}
+
 void FlameshotDaemon::checkForUpdates()
 {
     if (m_appLatestUrl.isEmpty()) {
@@ -265,9 +284,9 @@ void FlameshotDaemon::quitIfIdle()
 
 // SERVICE METHODS
 
-void FlameshotDaemon::attachPin(const QPixmap& pixmap, QRect geometry)
+void FlameshotDaemon::attachPin(const QPixmap& pixmap, QRect geometry, const QByteArray& args)
 {
-    auto* pinWidget = new PinWidget(pixmap, geometry);
+    auto* pinWidget = new PinWidget(pixmap, geometry, args);
     m_widgets.append(pinWidget);
     connect(pinWidget, &QObject::destroyed, this, [=]() {
         m_widgets.removeOne(pinWidget);

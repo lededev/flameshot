@@ -1935,7 +1935,12 @@ Please solve them manually in the configuration file.</source>
         <translation>隐藏窗口阴影(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="359"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="425"/>
+        <source>&amp;Mouse transparent</source>
+        <translation>鼠标穿透(&amp;M)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="432"/>
         <source>Cl&amp;ose</source>
         <translation>关闭(&amp;O)</translation>
     </message>
@@ -2954,7 +2959,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>启动器(&amp;O)</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/trayicon.cpp" line="121"/>
+        <location filename="../../src/widgets/trayicon.cpp" line="127"/>
+        <source>&amp;Unset Mouse Transparent</source>
+        <translation>取消鼠标穿透(&amp;U)</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/trayicon.cpp" line="134"/>
         <source>&amp;Configuration</source>
         <translation>配置(&amp;C)</translation>
     </message>

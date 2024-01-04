@@ -28,6 +28,7 @@ private:
     void startGuiCapture();
 
     QMenu* m_menu;
+    QAction* m_unsetMouseTransparentAction;
 #if !defined(DISABLE_UPDATE_CHECKER)
     QAction* m_appUpdates;
 #endif

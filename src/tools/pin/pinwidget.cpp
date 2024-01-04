@@ -29,13 +29,14 @@ constexpr qreal MIN_SIZE = 100.0;
 
 PinWidget::PinWidget(const QPixmap& pixmap,
                      const QRect& geometry,
-                     QWidget* parent)
-  : QWidget(parent)
+                     const QByteArray& args)
+  : QWidget(nullptr)
   , m_pixmap(pixmap)
   , m_layout(new QVBoxLayout(this))
   , m_label(new QLabel())
   , m_shadowEffect(new QGraphicsDropShadowEffect(this))
 {
+    setArgs(args);
     setWindowIcon(QIcon(GlobalValues::iconPath()));
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
@@ -267,6 +268,30 @@ void PinWidget::changeOpacity(qreal step)
         QString("%1").arg(static_cast<long>(m_opacity * 100)));
 }
 
+void PinWidget::setArgs(const QByteArray& args)
+{
+    if (!args.size())
+        return;
+    QDataStream qs(args);
+    qs >> m_expanding
+        >> m_scaleFactor
+        >> m_opacity
+        >> m_currentStepScaleFactor;
+    if (m_currentStepScaleFactor < 0.9999 || m_currentStepScaleFactor > 1.0001)
+        m_sizeChanged = true;
+}
+
+QByteArray PinWidget::packArgs()
+{
+    QByteArray args;
+    QDataStream qs(&args, QIODevice::WriteOnly);
+    qs << m_expanding
+        << m_scaleFactor
+        << m_opacity
+        << m_currentStepScaleFactor;
+    return args;
+}
+
 bool PinWidget::event(QEvent* event)
 {
     if (event->type() == QEvent::Gesture) {
@@ -338,14 +363,18 @@ void PinWidget::showContextMenu(const QPoint& pos)
     connect(&cloneAction,
         &QAction::triggered,
         this,
-        [=]() { FlameshotDaemon::instance()->
-            attachPin(m_pixmap, geometry() - layout()->contentsMargins()); });
+        [=]() {
+            FlameshotDaemon::instance()->attachPin(
+                m_pixmap,
+                geometry() - layout()->contentsMargins(),
+                packArgs());
+        });
     contextMenu.addAction(&cloneAction);
 
     QAction editAction(tr("&Edit"), this);
     connect(
       &editAction, &QAction::triggered, this,
-        [=](){
+        [=]() {
             CaptureRequest req(CaptureRequest::GRAPHICAL_MODE);
             req.addTask(CaptureRequest::PIN);
             req.setInitialSelection(geometry() - layout()->contentsMargins());
@@ -395,6 +424,13 @@ void PinWidget::showContextMenu(const QPoint& pos)
         contextMenu.addAction(&hideShadowAction);
     }
 
+    QAction mouseTransparentAction(tr("&Mouse transparent"), this);
+    connect(&mouseTransparentAction,
+        &QAction::triggered,
+        this,
+        [=]() { setMouseTransparent(true); });
+        contextMenu.addAction(&mouseTransparentAction);
+
     QAction closePinAction(tr("Cl&ose"), this);
     connect(&closePinAction, &QAction::triggered, this, &PinWidget::closePin);
     contextMenu.addSeparator();
@@ -408,4 +444,33 @@ void PinWidget::saveToFile()
     hide();
     saveToFilesystemGUI(m_pixmap);
     show();
+}
+
+void PinWidget::setMouseTransparent(bool on)
+{
+    if (on) {
+        hide();
+        if (m_opacity >= 0.99999) {
+            setWindowOpacity(0.5);
+        }
+        setWindowFlags(windowFlags() | Qt::WindowTransparentForInput);
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        show();
+        m_mouseTrans = true;
+    }
+    else {
+        if (!m_mouseTrans)
+            return;
+        m_mouseTrans = false;
+        FlameshotDaemon::instance()->
+            attachPin(m_pixmap,
+                geometry() - layout()->contentsMargins(),
+                packArgs());
+        close();
+    }
+}
+
+bool PinWidget::isMouseTransparent() const
+{
+    return m_mouseTrans;
 }

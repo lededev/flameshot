@@ -31,13 +31,14 @@ public:
     static bool isThisInstanceHostingWidgets();
 
     TrayIcon* getTrayIcon() { return m_trayIcon; };
-    void attachPin(const QPixmap& pixmap, QRect geometry);
+    void attachPin(const QPixmap& pixmap, QRect geometry, const QByteArray& args = QByteArray());
     void showFloatingText(const QString& text, QPoint pos = QPoint());
 
     void sendTrayNotification(
       const QString& text,
       const QString& title = QStringLiteral("Flameshot Info"),
       const int timeout = 5000);
+    qsizetype countMouseTransparent();
 
 #if !defined(DISABLE_UPDATE_CHECKER)
     void showUpdateNotificationIfAvailable(CaptureWidget* widget);
@@ -45,6 +46,7 @@ public:
 public slots:
     void checkForUpdates();
     void getLatestAvailableVersion();
+    void unsetAllMouseTransparent();
 
 private slots:
     void handleReplyCheckUpdates(QNetworkReply* reply);
