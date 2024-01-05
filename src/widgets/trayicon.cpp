@@ -52,12 +52,22 @@ TrayIcon::TrayIcon(QObject* parent)
     }
 #else
     connect(this, &TrayIcon::activated, this, [this](ActivationReason r) {
-        if (r == Trigger) {
+        switch (r)
+        {
+        case QSystemTrayIcon::Trigger:
             startGuiCapture();
-        }
-        else if (r == Context) {
+            break;
+        case QSystemTrayIcon::Context:
             m_unsetMouseTransparentAction->setEnabled(
                 FlameshotDaemon::instance()->countMouseTransparent() > 0);
+            break;
+        case QSystemTrayIcon::DoubleClick:
+            break;
+        case QSystemTrayIcon::MiddleClick:
+            startGuiCapture(ConfigHandler().delayTakeScreenshotTime());
+            break;
+        default:
+            break;
         }
     });
 #endif
@@ -119,6 +129,10 @@ void TrayIcon::initMenu()
     });
 #endif
     });
+    auto* delayCaptureAction = new QAction(tr("&Delay Take Screenshot"), this);
+    connect(delayCaptureAction, &QAction::triggered, this, [this]() {
+            startGuiCapture(ConfigHandler().delayTakeScreenshotTime());
+        });
     auto* launcherAction = new QAction(tr("&Open Launcher"), this);
     connect(launcherAction,
             &QAction::triggered,
@@ -174,6 +188,7 @@ void TrayIcon::initMenu()
             &Flameshot::openSavePath);
 
     m_menu->addAction(captureAction);
+    m_menu->addAction(delayCaptureAction);
     m_menu->addAction(launcherAction);
     m_menu->addAction(m_unsetMouseTransparentAction);
     m_menu->addSeparator();
@@ -203,8 +218,13 @@ void TrayIcon::enableCheckUpdatesAction(bool enable)
 }
 #endif
 
-void TrayIcon::startGuiCapture()
+void TrayIcon::startGuiCapture(int delay)
 {
+    if (delay > 0) {
+       QTimer::singleShot(delay, [=]() { Flameshot::instance()->gui(); });
+       FlameshotDaemon::instance()->showFloatingText(tr("Delay %1 milliseconds Capture screen").arg(delay));
+       return;
+    }
     auto* widget = Flameshot::instance()->gui();
 #if !defined(DISABLE_UPDATE_CHECKER)
     FlameshotDaemon::instance()->showUpdateNotificationIfAvailable(widget);

@@ -66,6 +66,7 @@ GeneralConf::GeneralConf(QWidget* parent)
     initShowMagnifier();
     initSquareMagnifier();
     initJpegQuality();
+    initDelayTakeScreenshotTime();
     // this has to be at the end
     initConfigButtons();
     updateComponents();
@@ -813,6 +814,25 @@ void GeneralConf::initJpegQuality()
             &GeneralConf::setJpegQuality);
 }
 
+void GeneralConf::initDelayTakeScreenshotTime()
+{
+    auto* tobox = new QHBoxLayout();
+
+    int delay = ConfigHandler().value("delayTakeScreenshotTime").toInt();
+    m_delayTakeScreenshotTime = new QSpinBox();
+    m_delayTakeScreenshotTime->setRange(0, 30000);
+    m_delayTakeScreenshotTime->setToolTip(tr("Value of delay milliseconds before take screenshot"));
+    m_delayTakeScreenshotTime->setValue(delay);
+    tobox->addWidget(m_delayTakeScreenshotTime);
+    tobox->addWidget(new QLabel(tr("Delay before screenshot (milliseconds)")));
+
+    m_scrollAreaLayout->addLayout(tobox);
+    connect(m_delayTakeScreenshotTime,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this,
+            &GeneralConf::setDelayTakeScreenshotTime);
+}
+
 void GeneralConf::setSelGeoHideTime(int v)
 {
     ConfigHandler().setValue("showSelectionGeometryHideTime", v);
@@ -821,6 +841,11 @@ void GeneralConf::setSelGeoHideTime(int v)
 void GeneralConf::setJpegQuality(int v)
 {
     ConfigHandler().setJpegQuality(v);
+}
+
+void GeneralConf::setDelayTakeScreenshotTime(int v)
+{
+    ConfigHandler().setDelayTakeScreenshotTime(v);
 }
 
 void GeneralConf::setGeometryLocation(int index)

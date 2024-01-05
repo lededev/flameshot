@@ -131,6 +131,9 @@ public:
     CONFIG_GETTER_SETTER(showSelectionGeometryHideTime,
                          showSelectionGeometryHideTime,
                          int)
+    CONFIG_GETTER_SETTER(delayTakeScreenshotTime,
+                         setDelayTakeScreenshotTime,
+                         int)
 
     // SPECIAL CASES
     bool startupLaunch();

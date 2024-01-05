@@ -231,6 +231,12 @@ void ShortcutsWidget::loadShortcuts()
     // disabled for now.
 #endif
     m_shortcuts << (QStringList()
+                    << "" << QObject::tr("Capture screen") << tr("Click Tray Icon"));
+    m_shortcuts << (QStringList() << "" <<
+        QObject::tr("Delay %1 milliseconds Capture screen").arg(m_config.delayTakeScreenshotTime())
+                << tr("Middle Click Tray Icon"));
+
+    m_shortcuts << (QStringList()
                     << "" << QObject::tr("Show color picker") << tr("Middle Click"));
     m_shortcuts << (QStringList()
                     << "" << QObject::tr("Show color picker") << tr("Ctrl+Right Click"));

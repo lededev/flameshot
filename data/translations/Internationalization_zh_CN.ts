@@ -1440,6 +1440,16 @@ Please solve them manually in the configuration file.</source>
         <source>JPEG Quality</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="824"/>
+        <source>Value of delay milliseconds before take screenshot</source>
+        <translation>抓屏之前的延迟毫秒数值</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/generalconf.cpp" line="827"/>
+        <source>Delay before screenshot (milliseconds)</source>
+        <translation>延时抓屏（毫秒）</translation>
+    </message>
 </context>
 <context>
     <name>HistoryWidget</name>
@@ -2104,7 +2114,7 @@ Please solve them manually in the configuration file.</source>
     <message>
         <location filename="../../src/main.cpp" line="179"/>
         <source>Delay time in milliseconds</source>
-        <translation>延迟时间，以毫秒计</translation>
+        <translation>延迟时间（毫秒）</translation>
     </message>
     <message>
         <location filename="../../src/main.cpp" line="184"/>
@@ -2219,7 +2229,7 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     </message>
     <message>
         <source>Invalid delay, it must be higher than 0</source>
-        <translation type="vanished">无效的延迟时间，数字必须大于0</translation>
+        <translation type="vanished">无效的延时数值，值必须大于0</translation>
     </message>
     <message>
         <location filename="../../src/main.cpp" line="245"/>
@@ -2382,7 +2392,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>捕获屏幕</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="210"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="236"/>
+        <source>Delay %1 milliseconds Capture screen</source>
+        <translation>延时 %1 毫秒抓屏</translation>
+    </message>
+    <message>
         <source>Change select area by window</source>
         <translation type="unfinished">按窗口改变选择区域</translation>
     </message>
@@ -2681,7 +2695,16 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>屏幕截图历史</translation>
     </message>
     <message>
-        <location filename="../../src/config/shortcutswidget.cpp" line="210"/>
+        <location filename="../../src/config/shortcutswidget.cpp" line="234"/>
+        <source>Click Tray Icon</source>
+        <translation>点击托盘图标</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="237"/>
+        <source>Middle Click Tray Icon</source>
+        <translation>鼠标中键点击托盘图标</translation>
+    </message>
+    <message>
         <source>Mouse Wheel</source>
         <translation>鼠标滚轮</translation>
     </message>
@@ -2954,7 +2977,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <translation>抓屏(&amp;T)</translation>
     </message>
     <message>
-        <location filename="../../src/widgets/trayicon.cpp" line="116"/>
+        <location filename="../../src/widgets/trayicon.cpp" line="132"/>
+        <source>&amp;Delay Take Screenshot</source>
+        <translation>延时抓屏(&amp;D)</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/trayicon.cpp" line="136"/>
         <source>&amp;Open Launcher</source>
         <translation>启动器(&amp;O)</translation>
     </message>
@@ -2997,6 +3025,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <location filename="../../src/widgets/trayicon.cpp" line="159"/>
         <source>Open &amp;Save Path</source>
         <translation>抓屏文件夹(&amp;S)</translation>
+    </message>
+    <message>
+        <location filename="../../src/widgets/trayicon.cpp" line="225"/>
+        <source>Delay %1 milliseconds Capture screen</source>
+        <translation>延时 %1 毫秒抓屏</translation>
     </message>
 </context>
 <context>

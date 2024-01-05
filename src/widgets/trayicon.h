@@ -25,7 +25,7 @@ private:
     void enableCheckUpdatesAction(bool enable);
 #endif
 
-    void startGuiCapture();
+    void startGuiCapture(int delay = 0);
 
     QMenu* m_menu;
     QAction* m_unsetMouseTransparentAction;
