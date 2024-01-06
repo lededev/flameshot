@@ -37,10 +37,6 @@ private:
     bool scrollEvent(QWheelEvent* e);
     void pinchTriggered(QPinchGesture*);
     void closePin();
-
-    void rotateLeft();
-    void rotateRight();
-
     void changeOpacity(qreal step);
     void setArgs(const QByteArray& args);
     QByteArray packArgs();

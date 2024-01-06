@@ -1935,17 +1935,32 @@ Please solve them manually in the configuration file.</source>
         <translation>缩小	鼠标滚轮向下</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="410"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="394"/>
+        <source>Image &amp;transform</source>
+        <translation>图像变换(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="395"/>
         <source>Rotate &amp;Right</source>
         <translation>顺时针旋转(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="326"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="404"/>
         <source>Rotate &amp;Left</source>
         <translation>逆时针旋转(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="331"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="413"/>
+        <source>&amp;Horizontal mirroring</source>
+        <translation>水平翻转(&amp;H)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="423"/>
+        <source>&amp;Vertical mirroring</source>
+        <translation>垂直翻转(&amp;V)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="438"/>
         <source>&amp;Increase Opacity</source>
         <translation>减少透明度(&amp;I)</translation>
     </message>

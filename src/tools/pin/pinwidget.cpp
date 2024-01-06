@@ -239,22 +239,6 @@ bool PinWidget::gestureEvent(QGestureEvent* event)
     return true;
 }
 
-void PinWidget::rotateLeft()
-{
-    m_sizeChanged = true;
-
-    auto rotateTransform = QTransform().rotate(270);
-    m_pixmap = m_pixmap.transformed(rotateTransform);
-}
-
-void PinWidget::rotateRight()
-{
-    m_sizeChanged = true;
-
-    auto rotateTransform = QTransform().rotate(90);
-    m_pixmap = m_pixmap.transformed(rotateTransform);
-}
-
 void PinWidget::changeOpacity(qreal step)
 {
     m_opacity += step;
@@ -381,7 +365,7 @@ void PinWidget::showContextMenu(const QPoint& pos)
                 [=]() { close(); });
         });
 
-    QMenu subMenu(tr("&Zoom"), this);
+    QMenu zoomSubMenu(tr("&Zoom"), this);
     QVector<QString> subActstr = {
         "25%", "50%", "75%", "100%", "125%", "150%", "175%", "200%" , "250%", "300%"
     };
@@ -392,7 +376,7 @@ void PinWidget::showContextMenu(const QPoint& pos)
         auto act = new QAction(m, this);
         act->setData(digi.toDouble());
         subActs.append(act);
-        subMenu.addAction(act);
+        zoomSubMenu.addAction(act);
         connect(act, &QAction::triggered, this,
             [=]() {
                 m_currentStepScaleFactor = act->data().toDouble() / 100;
@@ -403,17 +387,53 @@ void PinWidget::showContextMenu(const QPoint& pos)
                     tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
             });
     }
-    subMenu.addSeparator();
-    subMenu.addAction(tr("Zoom out\tMouse Scroll Up"))->setDisabled(true);
-    subMenu.addAction(tr("Zoom in\tMouse Scroll Down"))->setDisabled(true);
+    zoomSubMenu.addSeparator();
+    zoomSubMenu.addAction(tr("Zoom out\tMouse Scroll Up"))->setDisabled(true);
+    zoomSubMenu.addAction(tr("Zoom in\tMouse Scroll Down"))->setDisabled(true);
 
+    QMenu imageTransformSubMenu(tr("Image &transform"), this);
     QAction rotateRightAction(tr("Rotate &Right"), this);
-    connect(
-      &rotateRightAction, &QAction::triggered, this, &PinWidget::rotateRight);
-
+    connect(&rotateRightAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_sizeChanged = true;
+            auto rotateTransform = QTransform().rotate(90);
+            m_pixmap = m_pixmap.transformed(rotateTransform);
+        });
     QAction rotateLeftAction(tr("Rotate &Left"), this);
-    connect(
-      &rotateLeftAction, &QAction::triggered, this, &PinWidget::rotateLeft);
+    connect(&rotateLeftAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_sizeChanged = true;
+            auto rotateTransform = QTransform().rotate(270);
+            m_pixmap = m_pixmap.transformed(rotateTransform);
+        });
+    QAction horizontalMirroringAction(tr("&Horizontal mirroring"), this);
+    connect(&horizontalMirroringAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_sizeChanged = true;
+            auto rotateTransform = QTransform().scale(-1, 1);
+            m_pixmap = m_pixmap.transformed(rotateTransform);
+            update();
+        });
+    QAction verticalMirroringAction(tr("&Vertical mirroring"), this);
+    connect(&verticalMirroringAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_sizeChanged = true;
+            auto rotateTransform = QTransform().scale(1, -1);
+            m_pixmap = m_pixmap.transformed(rotateTransform);
+            update();
+        });
+    imageTransformSubMenu.addAction(&rotateRightAction);
+    imageTransformSubMenu.addAction(&rotateLeftAction);
+    imageTransformSubMenu.addAction(&horizontalMirroringAction);
+    imageTransformSubMenu.addAction(&verticalMirroringAction);
 
     QAction increaseOpacityAction(tr("&Increase Opacity"), this);
     connect(&increaseOpacityAction,
@@ -462,9 +482,8 @@ void PinWidget::showContextMenu(const QPoint& pos)
     contextMenu.addAction(&cloneAction);
     contextMenu.addAction(&editAction);
     contextMenu.addSeparator();
-    contextMenu.addMenu(&subMenu);
-    contextMenu.addAction(&rotateRightAction);
-    contextMenu.addAction(&rotateLeftAction);
+    contextMenu.addMenu(&zoomSubMenu);
+    contextMenu.addMenu(&imageTransformSubMenu);
     contextMenu.addAction(&increaseOpacityAction);
     contextMenu.addAction(&decreaseOpacityAction);
     contextMenu.addAction(&windowShadowAction);
