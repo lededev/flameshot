@@ -1927,12 +1927,12 @@ Please solve them manually in the configuration file.</source>
     <message>
         <location filename="../../src/tools/pin/pinwidget.cpp" line="407"/>
         <source>Zoom out	Mouse Scroll Up</source>
-        <translation>放大	鼠标滚轮向上</translation>
+        <translation>放大(&amp;D)	鼠标滚轮向上</translation>
     </message>
     <message>
         <location filename="../../src/tools/pin/pinwidget.cpp" line="408"/>
         <source>Zoom in	Mouse Scroll Down</source>
-        <translation>缩小	鼠标滚轮向下</translation>
+        <translation>缩小(&amp;X)	鼠标滚轮向下</translation>
     </message>
     <message>
         <location filename="../../src/tools/pin/pinwidget.cpp" line="394"/>
@@ -1960,27 +1960,32 @@ Please solve them manually in the configuration file.</source>
         <translation>垂直翻转(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="438"/>
-        <source>&amp;Increase Opacity</source>
-        <translation>减少透明度(&amp;I)</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="462"/>
+        <source>Op&amp;acity</source>
+        <translation>不透明度(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="338"/>
-        <source>&amp;Decrease Opacity</source>
-        <translation>增加透明度(&amp;D)</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="480"/>
+        <source>&amp;Increase Opacity	Ctrl+Mouse Scroll Up</source>
+        <translation>增加(&amp;I)	Ctrl+鼠标滚轮向上</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="414"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="485"/>
+        <source>&amp;Decrease Opacity	Ctrl+Mouse Scroll Down</source>
+        <translation>减少(&amp;D)	Ctrl+鼠标滚轮向下</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="494"/>
         <source>&amp;Window Shadow</source>
         <translation>窗口阴影(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="438"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="515"/>
         <source>&amp;Mouse transparent</source>
         <translation>鼠标穿透(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="432"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="521"/>
         <source>Cl&amp;ose</source>
         <translation>关闭(&amp;O)</translation>
     </message>

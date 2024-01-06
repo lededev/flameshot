@@ -387,9 +387,33 @@ void PinWidget::showContextMenu(const QPoint& pos)
                     tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
             });
     }
+    QAction zoomOutAction(tr("Zoom out\tMouse Scroll Up"), this);
+    connect(&zoomOutAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_currentStepScaleFactor += SCALING_STEP;
+            m_expanding = m_currentStepScaleFactor >= 1.0;
+            m_sizeChanged = true;
+            update();
+            FlameshotDaemon::instance()->showFloatingText(
+                tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
+        });
+    QAction zoomInAction(tr("Zoom in\tMouse Scroll Down"), this);
+    connect(&zoomInAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            m_currentStepScaleFactor -= SCALING_STEP;
+            m_expanding = m_currentStepScaleFactor >= 1.0;
+            m_sizeChanged = true;
+            update();
+            FlameshotDaemon::instance()->showFloatingText(
+                tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
+        });
     zoomSubMenu.addSeparator();
-    zoomSubMenu.addAction(tr("Zoom out\tMouse Scroll Up"))->setDisabled(true);
-    zoomSubMenu.addAction(tr("Zoom in\tMouse Scroll Down"))->setDisabled(true);
+    zoomSubMenu.addAction(&zoomOutAction);
+    zoomSubMenu.addAction(&zoomInAction);
 
     QMenu imageTransformSubMenu(tr("Image &transform"), this);
     QAction rotateRightAction(tr("Rotate &Right"), this);
@@ -416,8 +440,8 @@ void PinWidget::showContextMenu(const QPoint& pos)
         this,
         [=]() {
             m_sizeChanged = true;
-            auto rotateTransform = QTransform().scale(-1, 1);
-            m_pixmap = m_pixmap.transformed(rotateTransform);
+            auto flipTransform = QTransform().scale(-1, 1);
+            m_pixmap = m_pixmap.transformed(flipTransform);
             update();
         });
     QAction verticalMirroringAction(tr("&Vertical mirroring"), this);
@@ -426,8 +450,8 @@ void PinWidget::showContextMenu(const QPoint& pos)
         this,
         [=]() {
             m_sizeChanged = true;
-            auto rotateTransform = QTransform().scale(1, -1);
-            m_pixmap = m_pixmap.transformed(rotateTransform);
+            auto flipTransform = QTransform().scale(1, -1);
+            m_pixmap = m_pixmap.transformed(flipTransform);
             update();
         });
     imageTransformSubMenu.addAction(&rotateRightAction);
@@ -435,17 +459,37 @@ void PinWidget::showContextMenu(const QPoint& pos)
     imageTransformSubMenu.addAction(&horizontalMirroringAction);
     imageTransformSubMenu.addAction(&verticalMirroringAction);
 
-    QAction increaseOpacityAction(tr("&Increase Opacity"), this);
+    QMenu opacitySubMenu(tr("Op&acity"), this);
+    QVector<QString> opacityActstr = {
+        "100%", "90%", "80%", "70%", "60%", "50%", "40%", "30%" , "20%", "10%", "0%"
+    };
+    QList<QAction*> opacityActs;
+    for (auto& o : opacityActstr) {
+        QString digi(o);
+        digi.chop(1);
+        auto act = new QAction(o, this);
+        act->setData(digi.toDouble());
+        subActs.append(act);
+        opacitySubMenu.addAction(act);
+        connect(act, &QAction::triggered, this,
+            [=]() {
+                m_opacity = act->data().toDouble() / 100;
+                changeOpacity(0.0);
+            });
+    }
+    QAction increaseOpacityAction(tr("&Increase Opacity\tCtrl+Mouse Scroll Up"), this);
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
             [=]() { changeOpacity(OPACITY_STEP); });
-
-    QAction decreaseOpacityAction(tr("&Decrease Opacity"), this);
+    QAction decreaseOpacityAction(tr("&Decrease Opacity\tCtrl+Mouse Scroll Down"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
             [=]() { changeOpacity(-OPACITY_STEP); });
+    opacitySubMenu.addSeparator();
+    opacitySubMenu.addAction(&increaseOpacityAction);
+    opacitySubMenu.addAction(&decreaseOpacityAction);
 
     QAction windowShadowAction(tr("&Window Shadow"), this);
     windowShadowAction.setCheckable(true);
@@ -484,8 +528,7 @@ void PinWidget::showContextMenu(const QPoint& pos)
     contextMenu.addSeparator();
     contextMenu.addMenu(&zoomSubMenu);
     contextMenu.addMenu(&imageTransformSubMenu);
-    contextMenu.addAction(&increaseOpacityAction);
-    contextMenu.addAction(&decreaseOpacityAction);
+    contextMenu.addMenu(&opacitySubMenu);
     contextMenu.addAction(&windowShadowAction);
     contextMenu.addAction(&mouseTransparentAction);
     contextMenu.addSeparator();
