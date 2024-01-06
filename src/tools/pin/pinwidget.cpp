@@ -105,6 +105,7 @@ void PinWidget::closePin()
     update();
     close();
 }
+
 bool PinWidget::scrollEvent(QWheelEvent* e)
 {
     if (e->modifiers() & Qt::ControlModifier) {
@@ -410,19 +411,27 @@ void PinWidget::showContextMenu(const QPoint& pos)
             [=]() { changeOpacity(-OPACITY_STEP); });
     contextMenu.addAction(&decreaseOpacityAction);
 
-    QAction hideShadowAction(tr("&Hide Shadow"), this);
-    if (m_shadowEffect && m_shadowEffect->isEnabled()) {
-        connect(&hideShadowAction,
-            &QAction::triggered,
-            this,
-            [=]() {
-                if (m_shadowEffect == nullptr)
-                    return;
-                m_shadowEffect->setEnabled(false);
-                m_shadowEffect = nullptr;
-            });
-        contextMenu.addAction(&hideShadowAction);
-    }
+    QAction hideShadowAction(tr("&Window Shadow"), this);
+    hideShadowAction.setCheckable(true);
+    hideShadowAction.setChecked(m_shadowEffect != nullptr);
+    connect(&hideShadowAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            if (m_shadowEffect == nullptr)
+            {
+                m_shadowEffect = new QGraphicsDropShadowEffect(this);
+                m_shadowEffect->setColor(m_baseColor);
+                m_shadowEffect->setBlurRadius(BLUR_RADIUS);
+                m_shadowEffect->setOffset(0, 0);
+                hide();
+                setGraphicsEffect(m_shadowEffect);
+                show();
+                return;
+            }
+            setGraphicsEffect(m_shadowEffect = nullptr);
+        });
+    contextMenu.addAction(&hideShadowAction);
 
     QAction mouseTransparentAction(tr("&Mouse transparent"), this);
     connect(&mouseTransparentAction,

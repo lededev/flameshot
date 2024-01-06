@@ -1940,12 +1940,12 @@ Please solve them manually in the configuration file.</source>
         <translation>增加透明度(&amp;D)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="345"/>
-        <source>&amp;Hide Shadow</source>
-        <translation>隐藏窗口阴影(&amp;H)</translation>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="414"/>
+        <source>&amp;Window Shadow</source>
+        <translation>窗口阴影(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="425"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="438"/>
         <source>&amp;Mouse transparent</source>
         <translation>鼠标穿透(&amp;M)</translation>
     </message>
