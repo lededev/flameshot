@@ -353,12 +353,10 @@ void PinWidget::showContextMenu(const QPoint& pos)
             &QAction::triggered,
             this,
             [=](){ saveToClipboard(m_pixmap); });
-    contextMenu.addAction(&copyToClipboardAction);
 
     QAction saveToFileAction(tr("&Save to file"), this);
     connect(
       &saveToFileAction, &QAction::triggered, this, &PinWidget::saveToFile);
-    contextMenu.addAction(&saveToFileAction);
 
     QAction cloneAction(tr("Clo&ne"), this);
     connect(&cloneAction,
@@ -370,7 +368,6 @@ void PinWidget::showContextMenu(const QPoint& pos)
                 geometry() - layout()->contentsMargins(),
                 packArgs());
         });
-    contextMenu.addAction(&cloneAction);
 
     QAction editAction(tr("&Edit"), this);
     connect(
@@ -383,38 +380,57 @@ void PinWidget::showContextMenu(const QPoint& pos)
             connect(Flameshot::instance(), &Flameshot::captureTaken, this,
                 [=]() { close(); });
         });
-    contextMenu.addAction(&editAction);
 
-    contextMenu.addSeparator();
+    QMenu subMenu(tr("&Zoom"), this);
+    QVector<QString> subActstr = {
+        "25%", "50%", "75%", "100%", "125%", "150%", "175%", "200%" , "250%", "300%"
+    };
+    QList<QAction*> subActs;
+    for (auto& m : subActstr) {
+        QString digi(m);
+        digi.chop(1);
+        auto act = new QAction(m, this);
+        act->setData(digi.toDouble());
+        subActs.append(act);
+        subMenu.addAction(act);
+        connect(act, &QAction::triggered, this,
+            [=]() {
+                m_currentStepScaleFactor = act->data().toDouble() / 100;
+                m_expanding = m_currentStepScaleFactor >= 1.0;
+                m_sizeChanged = true;
+                update();
+                FlameshotDaemon::instance()->showFloatingText(
+                    tr("Zoom %1%").arg(m_currentStepScaleFactor * 100, 0, 'f', 1));
+            });
+    }
+    subMenu.addSeparator();
+    subMenu.addAction(tr("Zoom out\tMouse Scroll Up"))->setDisabled(true);
+    subMenu.addAction(tr("Zoom in\tMouse Scroll Down"))->setDisabled(true);
 
     QAction rotateRightAction(tr("Rotate &Right"), this);
     connect(
       &rotateRightAction, &QAction::triggered, this, &PinWidget::rotateRight);
-    contextMenu.addAction(&rotateRightAction);
 
     QAction rotateLeftAction(tr("Rotate &Left"), this);
     connect(
       &rotateLeftAction, &QAction::triggered, this, &PinWidget::rotateLeft);
-    contextMenu.addAction(&rotateLeftAction);
 
     QAction increaseOpacityAction(tr("&Increase Opacity"), this);
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
             [=]() { changeOpacity(OPACITY_STEP); });
-    contextMenu.addAction(&increaseOpacityAction);
 
     QAction decreaseOpacityAction(tr("&Decrease Opacity"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
             [=]() { changeOpacity(-OPACITY_STEP); });
-    contextMenu.addAction(&decreaseOpacityAction);
 
-    QAction hideShadowAction(tr("&Window Shadow"), this);
-    hideShadowAction.setCheckable(true);
-    hideShadowAction.setChecked(m_shadowEffect != nullptr);
-    connect(&hideShadowAction,
+    QAction windowShadowAction(tr("&Window Shadow"), this);
+    windowShadowAction.setCheckable(true);
+    windowShadowAction.setChecked(m_shadowEffect != nullptr);
+    connect(&windowShadowAction,
         &QAction::triggered,
         this,
         [=]() {
@@ -431,17 +447,28 @@ void PinWidget::showContextMenu(const QPoint& pos)
             }
             setGraphicsEffect(m_shadowEffect = nullptr);
         });
-    contextMenu.addAction(&hideShadowAction);
 
     QAction mouseTransparentAction(tr("&Mouse transparent"), this);
     connect(&mouseTransparentAction,
         &QAction::triggered,
         this,
         [=]() { setMouseTransparent(true); });
-        contextMenu.addAction(&mouseTransparentAction);
 
     QAction closePinAction(tr("Cl&ose"), this);
     connect(&closePinAction, &QAction::triggered, this, &PinWidget::closePin);
+
+    contextMenu.addAction(&copyToClipboardAction);
+    contextMenu.addAction(&saveToFileAction);
+    contextMenu.addAction(&cloneAction);
+    contextMenu.addAction(&editAction);
+    contextMenu.addSeparator();
+    contextMenu.addMenu(&subMenu);
+    contextMenu.addAction(&rotateRightAction);
+    contextMenu.addAction(&rotateLeftAction);
+    contextMenu.addAction(&increaseOpacityAction);
+    contextMenu.addAction(&decreaseOpacityAction);
+    contextMenu.addAction(&windowShadowAction);
+    contextMenu.addAction(&mouseTransparentAction);
     contextMenu.addSeparator();
     contextMenu.addAction(&closePinAction);
 

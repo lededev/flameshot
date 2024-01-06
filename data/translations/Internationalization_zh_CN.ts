@@ -1920,7 +1920,22 @@ Please solve them manually in the configuration file.</source>
         <translation>编辑(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="321"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="384"/>
+        <source>&amp;Zoom</source>
+        <translation>缩放(&amp;Z)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="407"/>
+        <source>Zoom out	Mouse Scroll Up</source>
+        <translation>放大	鼠标滚轮向上</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="408"/>
+        <source>Zoom in	Mouse Scroll Down</source>
+        <translation>缩小	鼠标滚轮向下</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="410"/>
         <source>Rotate &amp;Right</source>
         <translation>顺时针旋转(&amp;R)</translation>
     </message>
