@@ -43,6 +43,7 @@ endif()
 
 
 # Configuration options
+option(Q_STATIC "enable Qt static" OFF)
 set(DEFAULT_RUN_IN_PLACE FALSE)
 if(WIN32)
   set(DEFAULT_RUN_IN_PLACE TRUE)
@@ -52,6 +53,10 @@ if(WIN32)
   add_definitions(-DFLAMESHOT_VERSION_BUGFIX=${CMAKE_PROJECT_VERSION_PATCH})
   add_definitions(-DFLAMESHOT_VERSION_BUILD=1)
   add_definitions(-DFLAMESHOT_VERSION_STRING="${PROJECT_VERSION}")
+  if(Q_STATIC)
+    add_definitions(-DQ_STATIC=1)
+    add_compile_options($<$<CONFIG:Debug>:/MTd>$<$<NOT:$<CONFIG:Debug>>:/MT>)
+  endif(Q_STATIC)
 elseif(APPLE)
   set(Qt5_DIR "$(brew --prefix qt5)/lib/cmake/Qt5/" CACHE PATH "directory where Qt5Config.cmake exists.")
   set(CMAKE_MACOSX_BUNDLE ON)

@@ -161,8 +161,10 @@ int main(int argc, char* argv[])
     wayland_hacks();
 #endif
 
+#ifdef Q_STATIC
     // static link need this
     Q_IMPORT_PLUGIN(QSvgPlugin);
+#endif
 
     // required for the button serialization
     // TODO: change to QVector in v1.0

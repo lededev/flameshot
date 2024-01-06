@@ -390,7 +390,7 @@ if (UNIX)
 endif ()
 
 # windeployqt
-if (WIN32)
+if (WIN32 AND NOT Q_STATIC)
     if (EXISTS $ENV{QTDIR}/bin/windeployqt.exe)
         if (CMAKE_BUILD_TYPE MATCHES Release)
             set(BINARIES_TYPE --release)
