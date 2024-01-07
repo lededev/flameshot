@@ -389,6 +389,10 @@ void Flameshot::exportCapture(const QPixmap& capture,
             AbstractLogger::info()
               << QObject::tr("Full screen screenshot pinned to screen");
         }
+#ifdef Q_OS_WIN
+        FlameshotDaemon::instance()->
+            showFloatingText(QObject::tr("Screenshot pinned to screen"));
+#endif
     }
 
     if (tasks & CR::UPLOAD) {

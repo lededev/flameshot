@@ -123,10 +123,8 @@ void TrayIcon::initMenu()
             QTimer::singleShot(400, this, [this]() { startGuiCapture(); });
         }
 #else
-    // Wait 400 ms to hide the QMenu
-    QTimer::singleShot(400, this, [this]() {
-        startGuiCapture();
-    });
+    // Wait 100 ms to hide the QMenu
+    startGuiCapture(100);
 #endif
     });
     auto* delayCaptureAction = new QAction(tr("&Delay Take Screenshot"), this);

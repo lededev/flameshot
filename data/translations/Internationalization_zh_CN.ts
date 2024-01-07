@@ -1261,12 +1261,12 @@ Please solve them manually in the configuration file.</source>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="446"/>
         <source>Use Enter key Pin</source>
-        <translation>使用回车键置顶贴图</translation>
+        <translation>使用回车键固定为贴图</translation>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="448"/>
         <source>Enable Press Enter key Pin screenshot</source>
-        <translation>使用回车键将选定区域置顶贴图</translation>
+        <translation>使用回车键将选定区域固定为贴图</translation>
     </message>
     <message>
         <location filename="../../src/config/generalconf.cpp" line="460"/>
@@ -1915,7 +1915,12 @@ Please solve them manually in the configuration file.</source>
         <translation>克隆(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="314"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="355"/>
+        <source>Pin cloning completed</source>
+        <translation>固定贴图克隆完成</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="358"/>
         <source>&amp;Edit</source>
         <translation>编辑(&amp;E)</translation>
     </message>
@@ -2299,6 +2304,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
         <location filename="../../src/core/flameshot.cpp" line="378"/>
         <source>Full screen screenshot pinned to screen</source>
         <translation>已将全屏截图作为贴图固定到屏幕</translation>
+    </message>
+    <message>
+        <location filename="../../src/core/flameshot.cpp" line="394"/>
+        <source>Screenshot pinned to screen</source>
+        <translation>已将截图作为贴图固定到屏幕</translation>
     </message>
     <message>
         <source>URL copied to clipboard.</source>
@@ -2872,7 +2882,7 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="46"/>
         <source>Week Day (1-7)</source>
-        <translation>周内的日（1-7）</translation>
+        <translation>星期（1-7）</translation>
     </message>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="47"/>
@@ -2897,12 +2907,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="54"/>
         <source>Day of Month (1-31)</source>
-        <translation>一月中的某天（1-31）</translation>
+        <translation>天，无前导0（1-31）</translation>
     </message>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="55"/>
         <source>Day (001-366)</source>
-        <translation>天（001-366）</translation>
+        <translation>年内某天（001-366）</translation>
     </message>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="58"/>
@@ -2917,12 +2927,12 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="61"/>
         <source>Hour (00-23)</source>
-        <translation>小时（00-23）</translation>
+        <translation>小时，24小时制（00-23）</translation>
     </message>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="62"/>
         <source>Hour (01-12)</source>
-        <translation>小时（01-12）</translation>
+        <translation>小时，12小时制（01-12）</translation>
     </message>
     <message>
         <location filename="../../src/config/strftimechooserwidget.cpp" line="63"/>

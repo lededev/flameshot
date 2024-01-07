@@ -23,6 +23,7 @@ NotifierBox::NotifierBox(QWidget* parent)
         wf |= Qt::Tool;
     }
     setWindowFlags(wf);
+    setFocusPolicy(Qt::FocusPolicy::NoFocus);
     m_timer = new QTimer(this);
     m_timer->setSingleShot(true);
     m_timer->setInterval(600);

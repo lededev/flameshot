@@ -143,13 +143,15 @@ void saveToClipboard(const QPixmap& capture)
 {
     // If we are able to properly save the file, save the file and copy to
     // clipboard.
+    const auto msg = QObject::tr("Capture saved to clipboard.");
     if ((ConfigHandler().saveAfterCopy()) &&
         (!ConfigHandler().savePath().isEmpty())) {
-        saveToFilesystem(capture,
-                         ConfigHandler().savePath(),
-                         QObject::tr("Capture saved to clipboard."));
+        saveToFilesystem(capture, ConfigHandler().savePath(), msg);
     } else {
-        AbstractLogger() << QObject::tr("Capture saved to clipboard.");
+        AbstractLogger() << msg;
+#ifdef Q_OS_WIN
+        FlameshotDaemon::instance()->showFloatingText(msg);
+#endif
     }
     if (ConfigHandler().useJpgForClipboard()) {
         // FIXME - it doesn't work on MacOS
@@ -218,7 +220,9 @@ bool saveToFilesystemGUI(const QPixmap& capture)
 
         QString msg = QObject::tr("Capture saved as ") + savePath;
         AbstractLogger().attachNotificationPath(savePath) << msg;
-
+#ifdef Q_OS_WIN
+        FlameshotDaemon::instance()->showFloatingText(msg);
+#endif
         if (config.copyPathAfterSave()) {
             FlameshotDaemon::copyToClipboard(
               savePath, QObject::tr("Path copied to clipboard as ") + savePath);

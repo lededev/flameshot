@@ -347,10 +347,12 @@ void PinWidget::showContextMenu(const QPoint& pos)
         &QAction::triggered,
         this,
         [=]() {
-            FlameshotDaemon::instance()->attachPin(
+            const auto fd = FlameshotDaemon::instance();
+            fd->attachPin(
                 m_pixmap,
                 geometry() - layout()->contentsMargins(),
                 packArgs());
+            fd->showFloatingText(tr("Pin cloning completed"));
         });
 
     QAction editAction(tr("&Edit"), this);
@@ -481,12 +483,12 @@ void PinWidget::showContextMenu(const QPoint& pos)
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
-            [=]() { changeOpacity(OPACITY_STEP); });
+            [=]() { changeOpacity(OPACITY_WHEEL_STEP); });
     QAction decreaseOpacityAction(tr("&Decrease Opacity\tCtrl+Mouse Scroll Down"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
-            [=]() { changeOpacity(-OPACITY_STEP); });
+            [=]() { changeOpacity(-OPACITY_WHEEL_STEP); });
     opacitySubMenu.addSeparator();
     opacitySubMenu.addAction(&increaseOpacityAction);
     opacitySubMenu.addAction(&decreaseOpacityAction);
