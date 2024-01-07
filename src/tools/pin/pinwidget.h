@@ -37,8 +37,10 @@ private:
     bool scrollEvent(QWheelEvent* e);
     void pinchTriggered(QPinchGesture*);
     void closePin();
-    void changeOpacity(qreal step);
+    void changeOpacityByStep(qreal step);
+    void applyOpacity();
     void setArgs(const QByteArray& args);
+    void setShadowEffect(bool on);
     QByteArray packArgs();
 
     QPixmap m_pixmap;

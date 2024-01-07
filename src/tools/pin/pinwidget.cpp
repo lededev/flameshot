@@ -34,9 +34,8 @@ PinWidget::PinWidget(const QPixmap& pixmap,
   , m_pixmap(pixmap)
   , m_layout(new QVBoxLayout(this))
   , m_label(new QLabel())
-  , m_shadowEffect(new QGraphicsDropShadowEffect(this))
+  , m_shadowEffect(nullptr)
 {
-    setArgs(args);
     setWindowIcon(QIcon(GlobalValues::iconPath()));
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     setFocusPolicy(Qt::StrongFocus);
@@ -49,10 +48,7 @@ PinWidget::PinWidget(const QPixmap& pixmap,
 
     m_layout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
-    m_shadowEffect->setColor(m_baseColor);
-    m_shadowEffect->setBlurRadius(BLUR_RADIUS);
-    m_shadowEffect->setOffset(0, 0);
-    setGraphicsEffect(m_shadowEffect);
+    setArgs(args);
     setWindowOpacity(m_opacity);
 
     m_label->setPixmap(m_pixmap);
@@ -132,10 +128,10 @@ bool PinWidget::scrollEvent(QWheelEvent* e)
         }
         switch (scrollDirection) {
         case 1:
-            changeOpacity(OPACITY_WHEEL_STEP);
+            changeOpacityByStep(OPACITY_WHEEL_STEP);
             break;
         case -1:
-            changeOpacity(-OPACITY_WHEEL_STEP);
+            changeOpacityByStep(-OPACITY_WHEEL_STEP);
             break;
         }
         return true;
@@ -207,30 +203,15 @@ void PinWidget::mouseMoveEvent(QMouseEvent* e)
 
 void PinWidget::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_0) {
-        m_opacity = 1.0;
-    } else if (event->key() == Qt::Key_9) {
-        m_opacity = 0.9;
-    } else if (event->key() == Qt::Key_8) {
-        m_opacity = 0.8;
-    } else if (event->key() == Qt::Key_7) {
-        m_opacity = 0.7;
-    } else if (event->key() == Qt::Key_6) {
-        m_opacity = 0.6;
-    } else if (event->key() == Qt::Key_5) {
-        m_opacity = 0.5;
-    } else if (event->key() == Qt::Key_4) {
-        m_opacity = 0.4;
-    } else if (event->key() == Qt::Key_3) {
-        m_opacity = 0.3;
-    } else if (event->key() == Qt::Key_2) {
-        m_opacity = 0.2;
-    } else if (event->key() == Qt::Key_1) {
-        m_opacity = 0.1;
+    const auto key = event->key();
+    if (key >= Qt::Key_0 && key <= Qt::Key_9) {
+        const auto v = key - Qt::Key_0;
+        m_opacity = (v == 0) ? 1.0 : static_cast<qreal>(v) / 10;
+        applyOpacity();
+        return;
     }
-
-    setWindowOpacity(m_opacity);
 }
+
 bool PinWidget::gestureEvent(QGestureEvent* event)
 {
     if (QGesture* pinch = event->gesture(Qt::PinchGesture)) {
@@ -239,7 +220,7 @@ bool PinWidget::gestureEvent(QGestureEvent* event)
     return true;
 }
 
-void PinWidget::changeOpacity(qreal step)
+void PinWidget::changeOpacityByStep(qreal step)
 {
     m_opacity += step;
     if (m_opacity < 0.0) {
@@ -247,23 +228,49 @@ void PinWidget::changeOpacity(qreal step)
     } else if (m_opacity > 1.0) {
         m_opacity = 1.0;
     }
+    applyOpacity();
+}
 
+void PinWidget::applyOpacity()
+{
     setWindowOpacity(m_opacity);
     FlameshotDaemon::instance()->showFloatingText(
-        QString("%1").arg(static_cast<long>(m_opacity * 100)));
+        tr("Opacity %1%").arg(m_opacity * 100, 0, 'f', 1));
+}
+
+void PinWidget::setShadowEffect(bool on)
+{
+    if (on) {
+        if (m_shadowEffect != nullptr)
+            return;
+        m_shadowEffect = new QGraphicsDropShadowEffect(this);
+        m_shadowEffect->setColor(m_baseColor);
+        m_shadowEffect->setBlurRadius(BLUR_RADIUS);
+        m_shadowEffect->setOffset(0, 0);
+        setGraphicsEffect(m_shadowEffect);
+    }
+    else {
+        setGraphicsEffect(m_shadowEffect = nullptr);
+    }
 }
 
 void PinWidget::setArgs(const QByteArray& args)
 {
-    if (!args.size())
+    if (!args.size()) {
+        setShadowEffect(true);
         return;
+    }
+    bool hasShadowEffect;
     QDataStream qs(args);
     qs >> m_expanding
         >> m_scaleFactor
         >> m_opacity
-        >> m_currentStepScaleFactor;
+        >> m_currentStepScaleFactor
+        >> hasShadowEffect;
     if (m_currentStepScaleFactor < 0.9999 || m_currentStepScaleFactor > 1.0001)
         m_sizeChanged = true;
+    if (hasShadowEffect)
+        setShadowEffect(true);
 }
 
 QByteArray PinWidget::packArgs()
@@ -273,7 +280,8 @@ QByteArray PinWidget::packArgs()
     qs << m_expanding
         << m_scaleFactor
         << m_opacity
-        << m_currentStepScaleFactor;
+        << m_currentStepScaleFactor
+        << bool(m_shadowEffect != nullptr);
     return args;
 }
 
@@ -476,19 +484,19 @@ void PinWidget::showContextMenu(const QPoint& pos)
         connect(act, &QAction::triggered, this,
             [=]() {
                 m_opacity = act->data().toDouble() / 100;
-                changeOpacity(0.0);
+                changeOpacityByStep(0.0);
             });
     }
     QAction increaseOpacityAction(tr("&Increase Opacity\tCtrl+Mouse Scroll Up"), this);
     connect(&increaseOpacityAction,
             &QAction::triggered,
             this,
-            [=]() { changeOpacity(OPACITY_WHEEL_STEP); });
+            [=]() { changeOpacityByStep(OPACITY_WHEEL_STEP); });
     QAction decreaseOpacityAction(tr("&Decrease Opacity\tCtrl+Mouse Scroll Down"), this);
     connect(&decreaseOpacityAction,
             &QAction::triggered,
             this,
-            [=]() { changeOpacity(-OPACITY_WHEEL_STEP); });
+            [=]() { changeOpacityByStep(-OPACITY_WHEEL_STEP); });
     opacitySubMenu.addSeparator();
     opacitySubMenu.addAction(&increaseOpacityAction);
     opacitySubMenu.addAction(&decreaseOpacityAction);
@@ -502,16 +510,13 @@ void PinWidget::showContextMenu(const QPoint& pos)
         [=]() {
             if (m_shadowEffect == nullptr)
             {
-                m_shadowEffect = new QGraphicsDropShadowEffect(this);
-                m_shadowEffect->setColor(m_baseColor);
-                m_shadowEffect->setBlurRadius(BLUR_RADIUS);
-                m_shadowEffect->setOffset(0, 0);
                 hide();
-                setGraphicsEffect(m_shadowEffect);
+                setShadowEffect(true);
                 show();
-                return;
             }
-            setGraphicsEffect(m_shadowEffect = nullptr);
+            else {
+                setShadowEffect(false);
+            }
         });
 
     QAction mouseTransparentAction(tr("&Mouse transparent"), this);
