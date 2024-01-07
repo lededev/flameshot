@@ -1895,7 +1895,12 @@ Please solve them manually in the configuration file.</source>
         <translation>缩放 %1%</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="323"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="238"/>
+        <source>Opacity %1%</source>
+        <translation>不透明度 %1%</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="341"/>
         <source>Context menu</source>
         <translation>上下文菜单</translation>
     </message>

@@ -235,7 +235,7 @@ void PinWidget::applyOpacity()
 {
     setWindowOpacity(m_opacity);
     FlameshotDaemon::instance()->showFloatingText(
-        tr("Opacity %1%").arg(m_opacity * 100, 0, 'f', 1));
+        tr("Opacity %1%").arg(m_opacity * 100, 0, 'f', 0));
 }
 
 void PinWidget::setShadowEffect(bool on)
