@@ -2721,6 +2721,11 @@ You may need to escape the &apos;#&apos; sign as in &apos;\#FFF&apos;</source>
     </message>
     <message>
         <location filename="../../src/config/shortcutswidget.cpp" line="207"/>
+        <source>Copy All Information</source>
+        <translation>复制全部信息</translation>
+    </message>
+    <message>
+        <location filename="../../src/config/shortcutswidget.cpp" line="208"/>
         <source>Set Current RGB color value to color picker</source>
         <translation>设置光标处RGB颜色值到画笔</translation>
     </message>
