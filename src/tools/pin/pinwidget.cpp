@@ -17,6 +17,9 @@
 #include <QWheelEvent>
 #include <flameshot.h>
 #include <flameshotdaemon.h>
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
 
 namespace {
 constexpr int MARGIN = 7;
@@ -519,6 +522,30 @@ void PinWidget::showContextMenu(const QPoint& pos)
             }
         });
 
+#ifdef Q_OS_WIN
+    QAction windowOnTopAction(tr("Window on &Top"), this);
+    windowOnTopAction.setCheckable(true);
+    windowOnTopAction.setChecked(::GetWindowLong((HWND)winId(), GWL_EXSTYLE) & WS_EX_TOPMOST);
+    connect(&windowOnTopAction,
+        &QAction::triggered,
+        this,
+        [=]() {
+            HWND hwnd = (HWND) winId();
+            DWORD dwstyle = ::GetWindowLong(hwnd, GWL_EXSTYLE);
+            if (dwstyle & WS_EX_TOPMOST)
+            {
+                dwstyle &= ~WS_EX_TOPMOST;
+                ::SetWindowLong(hwnd, GWL_EXSTYLE, dwstyle);
+                ::SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREPOSITION|SWP_NOSIZE|SWP_SHOWWINDOW);
+            }
+            else {
+                dwstyle |= WS_EX_TOPMOST;
+                ::SetWindowLong(hwnd, GWL_EXSTYLE, dwstyle);
+                ::SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOREPOSITION|SWP_NOSIZE|SWP_SHOWWINDOW);
+            }
+        });
+#endif
+
     QAction mouseTransparentAction(tr("&Mouse transparent"), this);
     connect(&mouseTransparentAction,
         &QAction::triggered,
@@ -537,6 +564,9 @@ void PinWidget::showContextMenu(const QPoint& pos)
     contextMenu.addMenu(&imageTransformSubMenu);
     contextMenu.addMenu(&opacitySubMenu);
     contextMenu.addAction(&windowShadowAction);
+#ifdef Q_OS_WIN
+    contextMenu.addAction(&windowOnTopAction);
+#endif
     contextMenu.addAction(&mouseTransparentAction);
     contextMenu.addSeparator();
     contextMenu.addAction(&closePinAction);
@@ -554,7 +584,6 @@ void PinWidget::saveToFile()
 void PinWidget::setMouseTransparent(bool on)
 {
     if (on) {
-        hide();
         if (m_opacity >= 0.99999) {
             setWindowOpacity(0.5);
         }

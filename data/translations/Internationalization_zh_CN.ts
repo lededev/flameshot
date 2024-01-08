@@ -1990,7 +1990,12 @@ Please solve them manually in the configuration file.</source>
         <translation>窗口阴影(&amp;W)</translation>
     </message>
     <message>
-        <location filename="../../src/tools/pin/pinwidget.cpp" line="515"/>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="526"/>
+        <source>Window on &amp;Top</source>
+        <translation>窗口置顶(&amp;T)</translation>
+    </message>
+    <message>
+        <location filename="../../src/tools/pin/pinwidget.cpp" line="549"/>
         <source>&amp;Mouse transparent</source>
         <translation>鼠标穿透(&amp;M)</translation>
     </message>
